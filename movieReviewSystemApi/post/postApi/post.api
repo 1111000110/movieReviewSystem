@@ -1,0 +1,60 @@
+syntax = "v1"
+
+info (
+	title:   "帖子模块"
+	desc:    "帖子模块"
+	author:  "张璇"
+	email:   "xatuzx2025@163.com"
+	version: "1.0"
+)
+
+type ( //发布
+	PostCreateReq {
+		Text  string   `json:"text"`
+		Image []string `json:"image"`
+		Video []string `json:"video"`
+	}
+	PostCreateResp {
+		PostId int64 `json:"postId"`
+	}
+)
+
+type ( //查询
+	PostFindByPostIdReq {
+		PostId int64 `from:"postId"`
+	}
+	PostFindResp {
+		PostId int64    `json:"postId"`
+		Text   string   `json:"text"`
+		Image  []string `json:"image"`
+		Video  []string `json:"video"`
+		UserId int64    `json:"userId"`
+	}
+)
+
+type (
+	PostDeleteByPostIdReq {
+		PostId int64 `json:"postId"`
+	}
+	PostDeleteResp  {}
+)
+
+@server (
+	group:      Post // 统一管理用户相关 API
+	prefix:     /v1 // v1 版本
+	timeout:    3s // 超时时间
+	maxBytes:   1048576 // 最大结构体
+	middleware: Middleware // 中间件
+	jwt:        Auth // JWT 认证
+)
+service Post {
+	@handler PostCreate
+	put /user/delete (PostCreateReq) returns (PostCreateResp)
+
+	@handler PostDeleteByPostId
+	put /user/update (PostDeleteByPostIdReq) returns (PostDeleteResp)
+
+	@handler PostFindByPostId
+	get /user/query (PostFindByPostIdReq) returns (PostFindResp)
+}
+

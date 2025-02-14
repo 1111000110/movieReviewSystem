@@ -1,0 +1,41 @@
+syntax = "proto3";
+package post;
+option go_package = "./";
+//帖子创建请求
+message PostCreateReq{
+  string text=1;
+  repeated string image=2;
+  repeated string video=3;
+  int64 userId=4;
+}
+//帖子创建响应
+message PostCreateResp{
+  int64 postId=1;
+}
+//帖子查询请求
+message PostFindByPostIdReq{
+  int64 PostId=1;
+}
+//帖子查询响应
+message PostFindResp{
+  int64 UserId=1;
+  int64 PostId=2;
+  repeated string image=3;
+  repeated string video=4;
+  string text=5;
+}
+
+//帖子删除请求
+message PostDeleteByUserIdReq{
+  int64 UserId=1;
+  int64 PostId=2;
+}
+message PostDeleteResp{
+
+}
+// 帖子服务
+service PostService {
+  rpc PostCreate(PostCreateReq) returns (PostCreateResp);
+  rpc PostFindByPostId(PostFindByPostIdReq)returns(PostFindResp);
+  rpc PostDeleteByUserId(PostDeleteByUserIdReq)returns(PostDeleteResp);
+}

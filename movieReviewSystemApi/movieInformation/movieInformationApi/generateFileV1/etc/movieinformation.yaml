@@ -1,0 +1,8 @@
+Name: movieInformation
+Host: 0.0.0.0
+Port: 8888
+Auth:
+  AccessSecret: "zhangxuanliuxueqian"
+  AccessExpire: 6000
+Log:
+  Level: info

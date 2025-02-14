@@ -1,0 +1,56 @@
+syntax ="v1"
+info(
+    title:   "群组模块"
+    desc:    "群组模块"
+    author:  "张璇"
+    email:   "xatuzx2025@163.com"
+    version: "1.0"
+)
+type(//
+    GroupCreateReq{//用户创建群组请求
+        GroupName string `json:"groupName"`
+        GroupUrl string `json:"groupUrl"`
+        RootUserId int64    `json:"rootUserId"`
+    }
+    GroupCreateResp{//用户创建群组响应
+        GroupId int64 `json:"groupId"`
+    }
+)
+
+type(
+    GroupUserIdReq{//用户拉/删人请求
+        UserId int64 `json:"userId"`
+        AddUserId int64 `json:"addUserId"`
+        GroupId int64 `json:"groupId"`
+        Status int64 `json:"status"`
+    }
+    GroupUserIdResp{}
+)
+
+type(
+    GroupAdminIdReq{//用户管理员请求
+        UserId int64 `json:"userId"`
+        AdminId int64 `json:"addUserId"`
+        GroupId int64 `json:"groupId"`
+        Status int64 `json:"status"`
+    }
+    GroupAdminIdResp{}
+)
+type(
+    GroupDeleteReq{
+        UserId int64 `json:"userId"`
+        GroupId int64 `json:"groupId"`
+        Status int64 `json:"status"`
+    }
+    GroupDeleteResp{}
+)
+//
+//groupId int64
+//groupName string
+//groupUrl string
+//rootUserId int64
+//mamageUserId []int64
+//UserId []int64
+//status int64
+//createDate int64
+//updateDate int64

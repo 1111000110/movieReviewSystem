@@ -1,0 +1,54 @@
+syntax = "v1"
+
+info (
+	Title:   "电影信息模块"
+	Desc:    "电影信息服务"
+	Author:  "xuan"
+	Email:   "xatuzx2025@gmail.com"
+	Version: "v1"
+)
+
+type (
+	MovieInformation {
+		MovieInformationId int64    `json:"movieInformationId"` //电影id
+		Titlt              string   `json:"titlt"` // 电影的标题，通常是电影的主要名称
+		Desc               string   `json:"desc"` // 电影的简短描述或简介，用于概述电影内容
+		Author             string   `json:"author"` // 电影的作者或创作团队，可能指编剧、导演等
+		Actors             []string `json:"actors"` // 电影的主要演员名单，以字符串数组形式存储
+		Language           string   `json:"language"` // 电影的语言，如中文、英语等
+		Duration           int      `json:"duration"` // 电影的时长，通常以分钟为单位
+		ReleaseDate        string   `json:"release_date"` // 电影的上映日期，格式通常为“YYYY-MM-DD”
+		Genre              []string `json:"genre"` // 电影的类型或分类，如“喜剧”“科幻”“动作”等，以字符串数组存储
+		Poster             string   `json:"poster"` // 电影海报的图片链接，用于展示电影的视觉信息
+	}
+)
+
+type (
+	MovielnInformationReq {
+		UserId    int64                  `json:"userId"` // 用户ID
+		SortField string                 `json:"sortField"` // 排序字段，如 "popularity", "recency", "rating" 等
+		SortOrder string                 `json:"sortOrder"` // 排序顺序，"asc" 表示升序，"desc" 表示降序
+		Limit     int                    `json:"limit"` // 返回的记录数量限制
+		Offset    int64                  `json:"offset"` // 分页偏移量
+		Keywords  string                 `json:"keywords"` // 搜索关键词
+		Filters   map[string]interface{} `json:"filters"` // 过滤条件
+		Language  string                 `json:"language"` // 请求的语言偏好
+		Region    string                 `json:"region"` // 请求的地区偏好
+	}
+	MovieInfomationReq {
+		MovieInformation []MovieInformation `json:"movieInformation"`
+	}
+)
+
+@server (
+	prefix:     /v1 // v1 版本
+	timeout:    3s // 超时时间
+	maxBytes:   1048576 // 最大结构体
+	middleware: Middleware // 中间件
+	jwt:        Auth // JWT 认证
+)
+service movieInformation {
+	@handler getMovieInformation
+	post /movie/getmovieinformation (MovielnInformationReq) returns (MovieInfomationReq)
+}
+

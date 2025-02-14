@@ -1,0 +1,10 @@
+Name: post.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: post.rpc
+DB:
+  Url: mongodb://localhost:27017
+  Db: Post
+  Connect: Post

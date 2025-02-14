@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./";
+
+// 用户登录请求
+message UserLoginReq {
+    string phone = 1;
+    int64 user_id = 2;
+    string password = 3;
+}
+
+// 用户登录响应
+message UserLoginResp {
+    int64 user_id = 1;
+}
+
+// 用户注册请求
+message UserRegisterReq {
+    string phone = 1;
+    string password = 2;
+    string role = 3;
+}
+
+// 用户注册响应
+message UserRegisterResp {
+    int64 user_id = 1;
+}
+
+// 用户删除请求
+message UserDeleteReq {
+    string phone = 1; // 根据手机号删除用户
+    int64 user_id = 2;
+    string password = 3;
+}
+
+// 用户删除响应
+message UserDeleteResp {}
+
+// 用户更新请求
+message UserUpdateReq {
+    int64 user_id = 1;
+    string phone = 2;
+    string email = 3;
+    string password = 4;
+    string nick_name = 5;
+    string avatar = 6;
+    string gender = 7;
+    int64 birth_date = 8;
+    string role = 9;
+    int64 status = 10;
+}
+
+// 用户更新响应
+message UserUpdateResp {}
+
+// 用户查询请求
+message UserQueryReq {
+    int64 user_id = 1;
+}
+
+// 用户查询响应
+message UserQueryResp {
+    int64 user_id = 1;
+    string phone = 2;
+    string email = 3;
+    string password = 4;
+    string nick_name = 5;
+    string avatar = 6;
+    string gender = 7;
+    int64 birth_date = 8;
+    string role = 9;
+    int64 status = 10;
+}
+
+// 用户服务
+service UserService {
+    rpc UserLogin (UserLoginReq) returns (UserLoginResp);
+    rpc UserRegister (UserRegisterReq) returns (UserRegisterResp);
+    rpc UserDelete (UserDeleteReq) returns (UserDeleteResp);
+    rpc UserUpdate (UserUpdateReq) returns (UserUpdateResp);
+    rpc UserQuery (UserQueryReq) returns (UserQueryResp);
+}
