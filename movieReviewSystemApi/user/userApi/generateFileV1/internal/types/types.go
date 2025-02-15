@@ -3,6 +3,30 @@
 
 package types
 
+type Relations struct {
+	RelationsId      int64 `json:"relationsId"`
+	UserId           int64 `json:"userId"`
+	OtherId          int64 `json:"otherId"`
+	RelationshipType int64 `json:"relationshipType"`
+	CreateAt         int64 `json:"createAt"`
+	UpdateAt         int64 `json:"updateAt"`
+}
+
+type User struct {
+	UserId    int64  `json:"userId"`
+	Phone     string `json:"phone"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	NickName  string `json:"nickName"`
+	Avatar    string `json:"avatar"`
+	Gender    string `json:"gender"`
+	BirthDate int64  `json:"birthDate"`
+	Role      string `json:"role"`
+	Status    int64  `json:"status"`
+	CreateAt  int64  `json:"createAt"`
+	UpdateAt  int64  `json:"updateAt"`
+}
+
 type UserDeleteReq struct {
 	Phone    string `json:"phone"` // 根据手机号删除用户
 	UserId   int64  `json:"userId"`
@@ -10,6 +34,7 @@ type UserDeleteReq struct {
 }
 
 type UserDeleteResp struct {
+	User User `json:"user"`
 }
 
 type UserLoginReq struct {
@@ -23,20 +48,11 @@ type UserLoginResp struct {
 }
 
 type UserQueryReq struct {
-	UserId int64 `form:"userId"`
+	UserId int64 `json"userId"`
 }
 
 type UserQueryResp struct {
-	UserId    int64  `json:"userId"`
-	Phone     string `json:"phone"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	NickName  string `json:"nickName"`
-	Avatar    string `json:"avatar"`
-	Gender    string `json:"gender"`
-	BirthDate int64  `json:"birthDate"`
-	Role      string `json:"role"`
-	Status    int64  `json:"status"`
+	User User `json:"user"`
 }
 
 type UserRegisterReq struct {
@@ -46,21 +62,32 @@ type UserRegisterReq struct {
 }
 
 type UserRegisterResp struct {
-	UserId int64 `json:"userId"`
+	User User `json:"user"`
+}
+
+type UserRelationsGetReq struct {
+	UserId  int64 `json:"userId"`
+	OUserId int64 `json:"oUserId"`
+}
+
+type UserRelationsGetResp struct {
+	Relations Relations `json:"relations"`
+}
+
+type UserRelationsUpdateReq struct {
+	UserId           int64 `json:"userId"`
+	OUserId          int64 `json:"oUserId"`
+	RelationshipType int64 `json:"relations"`
+}
+
+type UserRelationsUpdateResp struct {
+	Relations Relations `json:"relations"`
 }
 
 type UserUpdateReq struct {
-	UserId    int64  `json:"userId"`
-	Phone     string `json:"phone"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	NickName  string `json:"nickName"`
-	Avatar    string `json:"avatar"`
-	Gender    string `json:"gender"`
-	BirthDate int64  `json:"birthDate"`
-	Role      string `json:"role"`
-	Status    int64  `json:"status"`
+	User User `json:"user"`
 }
 
 type UserUpdateResp struct {
+	User User `json:"user"`
 }

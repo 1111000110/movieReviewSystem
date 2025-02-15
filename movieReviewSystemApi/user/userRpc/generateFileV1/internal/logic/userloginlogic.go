@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
-	"movieReviewSystem/movieReviewSystemApi/user/userModel"
+	"movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
+	"strconv"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,11 +29,11 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 
 func (l *UserLoginLogic) UserLogin(in *__.UserLoginReq) (*__.UserLoginResp, error) {
 	// todo: add your logic here and delete this line
-	var userResp *userModel.Users
+	var userResp *model.User
 	var err error
 	switch {
 	case in.GetUserId() != 0:
-		userResp, err = l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUserId())
+		userResp, err = l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.GetUserId(), 10))
 	case in.GetPhone() != "":
 		phone, err := tool.Encrypt(in.Phone)
 		if err != nil {
@@ -44,16 +46,11 @@ func (l *UserLoginLogic) UserLogin(in *__.UserLoginReq) (*__.UserLoginResp, erro
 	if err != nil || userResp == nil {
 		return nil, err
 	}
-	status, err := userResp.Status.Value()
-	if err != nil {
-		return nil, err
-	}
-	if tool.ComparePassword(userResp.Password, in.GetPassword()) && status != __.Account_cancellation {
+	tokenString, err := tool.CreateToken(model.GetUserIdByID(userResp.ID), time.Duration(l.svcCtx.Config.Auth.AccessExpire)*time.Second, l.svcCtx.Config.Auth.AccessSecret)
+	if tool.ComparePassword(userResp.Password, in.GetPassword()) && userResp.Status != __.Account_cancellation {
 		return &__.UserLoginResp{
-			UserId: userResp.UserId,
+			Token: tokenString,
 		}, err
 	}
-	return &__.UserLoginResp{
-		UserId: -1,
-	}, err
+	return nil, err
 }

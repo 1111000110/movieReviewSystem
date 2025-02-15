@@ -7,7 +7,7 @@ UserRpcConf:
       - 127.0.0.1:2379
     Key: user.rpc
 Auth:
-  AccessSecret: "zhangxuanliuxueqian"
+  AccessSecret: "xiangongyedaxuzhangxuanshiye"
   AccessExpire: 6000
 Log:
   Level: info

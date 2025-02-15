@@ -47,3 +47,13 @@ func (s *UserServiceServer) UserQuery(ctx context.Context, in *__.UserQueryReq) 
 	l := logic.NewUserQueryLogic(ctx, s.svcCtx)
 	return l.UserQuery(in)
 }
+
+func (s *UserServiceServer) UserRelationsUpdate(ctx context.Context, in *__.UserRelationsUpdateReq) (*__.UserRelationsUpdateResp, error) {
+	l := logic.NewUserRelationsUpdateLogic(ctx, s.svcCtx)
+	return l.UserRelationsUpdate(in)
+}
+
+func (s *UserServiceServer) UserRelationsGet(ctx context.Context, in *__.UserRelationsGetReq) (*__.UserRelationsGetResp, error) {
+	l := logic.NewUserRelationsGetLogic(ctx, s.svcCtx)
+	return l.UserRelationsGet(in)
+}

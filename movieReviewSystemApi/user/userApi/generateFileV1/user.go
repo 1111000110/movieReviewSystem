@@ -2,8 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"github.com/zeromicro/go-zero/core/logx"
 	"movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/middleware"
 
 	"movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/config"
@@ -27,7 +25,5 @@ func main() {
 	server.Use(middleware.NewMiddleware().Handle) //使用全局中间件
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-	logx.Info("what")
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

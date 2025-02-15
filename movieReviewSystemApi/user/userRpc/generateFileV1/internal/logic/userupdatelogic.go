@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
-	"database/sql"
 	"github.com/pkg/errors"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
+	"strconv"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,49 +27,50 @@ func NewUserUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserUp
 }
 
 func (l *UserUpdateLogic) UserUpdate(in *__.UserUpdateReq) (*__.UserUpdateResp, error) {
-	userResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUserId())
+	userResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.GetUser().GetUserId(), 10))
 	if err != nil {
 		return nil, err
 	}
 	if userResp == nil {
 		return nil, errors.New("user not found")
 	}
-	if in.GetNickName() != "" {
-		userResp.NickName = sql.NullString{in.GetEmail(), true}
-	}
-	if in.GetEmail() != "" {
-		userResp.Email = sql.NullString{in.GetEmail(), true}
-	}
-	if in.GetPhone() != "" {
-		phone, err := tool.Encrypt(in.GetPhone())
+	if in.GetUser().GetPhone() != "" {
+		userResp.Phone, err = tool.Encrypt(in.GetUser().GetPhone())
 		if err != nil {
 			return nil, err
 		}
-		userResp.Phone = phone
 	}
-	if in.GetPassword() != "" {
-		password, err := tool.HashPassword(in.GetPassword())
+	if in.GetUser().GetEmail() != "" {
+		userResp.Email = in.GetUser().GetEmail()
+	}
+	if in.GetUser().GetPassword() != "" {
+		userResp.Password, err = tool.HashPassword(in.GetUser().GetPassword())
 		if err != nil {
 			return nil, err
 		}
-		userResp.Password = password
 	}
-	if in.GetAvatar() != "" {
-		userResp.Avatar = sql.NullString{in.GetAvatar(), true}
+	if in.GetUser().GetNickname() != "" {
+		userResp.Avatar = in.GetUser().GetAvatar()
 	}
-	if in.GetGender() != "" {
-		userResp.Gender = sql.NullString{in.GetGender(), true}
+	if in.GetUser().GetAvatar() != "" {
+		userResp.Avatar = in.GetUser().GetAvatar()
 	}
-	if in.GetBirthDate() != 0 {
-		userResp.BirthDate = sql.NullInt64{in.GetBirthDate(), true}
+	if in.GetUser().GetGender() != 0 {
+		userResp.Gender = in.GetUser().GetGender()
 	}
-	if in.GetRole() != "" {
-		userResp.Role = sql.NullString{in.GetRole(), true}
+	if in.GetUser().GetBirthDate() != 0 {
+		userResp.BirthDate = in.GetUser().GetBirthDate()
 	}
-	if in.GetStatus() != 0 {
-		userResp.Status = sql.NullInt64{in.GetStatus(), true}
+	if in.GetUser().GetRole() != "" {
+		userResp.Role = in.GetUser().GetRole()
 	}
-	userResp.UpdataDate = sql.NullInt64{time.Now().Unix(), true}
-	err = l.svcCtx.UsersModel.Update(l.ctx, userResp)
+	if in.GetUser().GetStatus() != 0 {
+		userResp.Status = in.GetUser().GetStatus()
+	}
+	if in.GetUser().GetCreateAt() != 0 {
+		userResp.CreateAt = in.GetUser().GetCreateAt()
+	}
+	userResp.UpdateAt = time.Now().Unix()
+	_, err = l.svcCtx.UsersModel.Update(l.ctx, userResp)
 	return &__.UserUpdateResp{}, nil
 }

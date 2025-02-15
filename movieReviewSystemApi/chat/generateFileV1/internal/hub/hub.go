@@ -3,6 +3,7 @@ package hub
 import (
 	"fmt"
 	"movieReviewSystem/movieReviewSystemApi/chat/generateFileV1/internal/types"
+	"time"
 )
 
 type Hub struct {
@@ -34,7 +35,7 @@ func (h *Hub) Run() {
 				close(client.GetSendBuffer())           // 关闭客户端的发送通道
 			}
 		case message := <-h.Broadcast: //有消息
-			fmt.Println(message)
+			fmt.Println(time.Now().Unix()) //zhangxuan 3
 			if client, ok := h.Clients[message.ToUserId]; ok {
 				select {
 				case client.GetSendBuffer() <- message: // 将消息发送到客户端的发送通道
@@ -44,6 +45,5 @@ func (h *Hub) Run() {
 				}
 			}
 		}
-		fmt.Println(len(h.Broadcast), len(h.Register), len(h.Unregister), len(h.Unregister))
 	}
 }

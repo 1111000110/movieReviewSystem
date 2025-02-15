@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
+	"strconv"
 
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
@@ -26,7 +27,7 @@ func NewUserDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserDe
 
 func (l *UserDeleteLogic) UserDelete(in *__.UserDeleteReq) (*__.UserDeleteResp, error) {
 	// todo: add your logic here and delete this line
-	respData, err := l.svcCtx.UsersModel.FindOne(l.ctx, in.UserId)
+	respData, err := l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.UserId, 10))
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +36,10 @@ func (l *UserDeleteLogic) UserDelete(in *__.UserDeleteReq) (*__.UserDeleteResp, 
 		return nil, err
 	}
 	if respData.Phone == phone && tool.ComparePassword(respData.Password, in.GetPassword()) {
-		updataServer := NewUserUpdateLogic(l.ctx, l.svcCtx)
-		_, err := updataServer.UserUpdate(&__.UserUpdateReq{UserId: in.UserId, Status: __.Account_cancellation})
+		updateServer := NewUserUpdateLogic(l.ctx, l.svcCtx)
+		userData, err := __.ModelUserToUser(*respData)
+		userData.Status = __.Account_cancellation
+		_, err = updateServer.UserUpdate(&__.UserUpdateReq{User: &userData})
 		if err != nil {
 			return nil, err
 		}

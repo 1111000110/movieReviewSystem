@@ -26,6 +26,8 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
-	go ctx.Hub.Run() //启动聊天中心
+	go ctx.Hub.Run()       //启动聊天中心
+	go ctx.Receive.Start() //启动消息队列监听
+	defer ctx.Receive.Stop()
 	server.Start()
 }

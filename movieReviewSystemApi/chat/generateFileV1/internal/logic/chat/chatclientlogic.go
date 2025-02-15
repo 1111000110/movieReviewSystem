@@ -3,6 +3,7 @@ package chat
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-zero/core/logx"
 	"log" // 用于日志记录
@@ -15,29 +16,10 @@ type ChatClientLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
-	// WebSocket 连接
-	conn   *websocket.Conn
+	conn   *websocket.Conn    // WebSocket 连接
 	Send   chan types.Message // 发送消息的缓冲通道
 	UserId int64
 }
-
-// 定义常量，用于控制 WebSocket 的行为
-const (
-	// 写操作的超时时间
-	writeWait = 10 * time.Second
-
-	// 等待对方发送 Pong 消息的超时时间
-	pongWait = 30 * time.Second
-
-	// 发送 Ping 消息的周期，必须小于 Pong 的等待时间
-	pingPeriod = (pongWait * 9) / 10
-
-	// 允许从对方接收的最大消息大小
-	maxMessageSize = 512
-
-	// 发送缓冲区的大小
-	bufSize = 256
-)
 
 func (c *ChatClientLogic) GetClientId() int64 {
 	return c.UserId
@@ -56,6 +38,7 @@ func (c *ChatClientLogic) ReadPump() {
 	// 循环读取消息
 	for {
 		_, message, err := c.conn.ReadMessage()
+
 		if err != nil {
 			// 如果读取失败，记录错误并退出
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
@@ -63,20 +46,18 @@ func (c *ChatClientLogic) ReadPump() {
 			}
 			break
 		}
-		// 清理消息中的换行符，并发送到 Hub
-		var msg types.Message
-		err = json.Unmarshal(message, &msg)
+		fmt.Println(time.Now().Unix())                     //zhangxuan 1
+		err = c.svcCtx.Pusher.Push(c.ctx, string(message)) //读取消息立马发kafka
 		if err != nil {
 			log.Println(err.Error())
 		}
-		c.svcCtx.Hub.Broadcast <- msg
 	}
 }
 
 // writePump 从 Hub 接收消息并发送到 WebSocket 连接
 func (c *ChatClientLogic) WritePump() {
 	// 创建一个定时器，用于定期发送 Ping 消息
-	ticker := time.NewTicker(pingPeriod)
+	ticker := time.NewTicker(time.Duration(c.svcCtx.Config.WebSocket.PingPeriod) * time.Second)
 	defer func() {
 		// 停止定时器并关闭连接
 		ticker.Stop()
@@ -88,7 +69,7 @@ func (c *ChatClientLogic) WritePump() {
 		select {
 		case message, ok := <-c.Send:
 			// 设置写入超时时间
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			c.conn.SetWriteDeadline(time.Now().Add(time.Duration(c.svcCtx.Config.WebSocket.WriteWait) * time.Second))
 			if !ok {
 				// 如果 Hub 关闭了发送通道，发送关闭消息并退出
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
@@ -118,7 +99,7 @@ func (c *ChatClientLogic) WritePump() {
 			}
 		case <-ticker.C:
 			// 定期发送 Ping 消息
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			c.conn.SetWriteDeadline(time.Now().Add(time.Duration(c.svcCtx.Config.WebSocket.PingPeriod) * time.Second))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}
@@ -126,11 +107,11 @@ func (c *ChatClientLogic) WritePump() {
 	}
 }
 func NewChatClientLogic(ctx context.Context, svcCtx *svc.ServiceContext, conn *websocket.Conn, userId int64) *ChatClientLogic {
-	conn.SetReadLimit(maxMessageSize)
-	conn.SetReadDeadline(time.Now().Add(pongWait))
+	conn.SetReadLimit(svcCtx.Config.WebSocket.MaxMessageSize)
+	conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
 	conn.SetPongHandler(func(string) error {
 		// 当收到 Pong 消息时，重置读取超时时间
-		conn.SetReadDeadline(time.Now().Add(pongWait))
+		conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
 		return nil
 	})
 	return &ChatClientLogic{
@@ -138,7 +119,7 @@ func NewChatClientLogic(ctx context.Context, svcCtx *svc.ServiceContext, conn *w
 		ctx:    ctx,
 		conn:   conn,
 		svcCtx: svcCtx,
-		Send:   make(chan types.Message, bufSize),
+		Send:   make(chan types.Message, svcCtx.Config.WebSocket.BufSize),
 		UserId: userId,
 	}
 }

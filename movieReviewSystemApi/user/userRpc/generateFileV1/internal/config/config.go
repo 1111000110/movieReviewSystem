@@ -7,6 +7,19 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	DB struct {
-		DataSource string
+		User struct {
+			Url        string
+			Db         string
+			Collection string
+		}
+		UserRelations struct {
+			Url        string
+			Db         string
+			Collection string
+		}
+	}
+	Auth struct {
+		AccessSecret string
+		AccessExpire int64
 	}
 }

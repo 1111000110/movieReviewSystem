@@ -24,7 +24,7 @@ func NewUserUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserUp
 
 func (l *UserUpdateLogic) UserUpdate(req *types.UserUpdateReq) (resp *types.UserUpdateResp, err error) {
 	// todo: add your logic here and delete this line
-	if l.ctx.Value("user_id").(int64) == req.UserId {
+	if l.ctx.Value("user_id").(int64) == req.User.UserId {
 		_, err = l.svcCtx.UserRpcService.UserUpdate(l.ctx, &userservice.UserUpdateReq{
 			UserId:    req.UserId,
 			Phone:     req.Phone,

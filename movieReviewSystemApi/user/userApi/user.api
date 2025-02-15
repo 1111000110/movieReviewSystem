@@ -8,6 +8,23 @@ info (
 	version: "1.0"
 )
 
+type (
+	User {
+		UserId    int64  `json:"userId"`
+		Phone     string `json:"phone"`
+		Email     string `json:"email"`
+		Password  string `json:"password"`
+		NickName  string `json:"nickName"`
+		Avatar    string `json:"avatar"`
+		Gender    string `json:"gender"`
+		BirthDate int64  `json:"birthDate"`
+		Role      string `json:"role"`
+		Status    int64  `json:"status"`
+		CreateAt  int64  `json:"createAt"`
+		UpdateAt  int64  `json:"updateAt"`
+	}
+)
+
 type ( // 登录
 	UserLoginReq {
 		Phone    string `json:"phone"`
@@ -26,7 +43,7 @@ type ( // 注册
 		Role     string `json:"role"`
 	}
 	UserRegisterResp {
-		UserId int64 `json:"userId"`
+		User User `json:"user"`
 	}
 )
 
@@ -51,44 +68,26 @@ type ( // 删除
 		UserId   int64  `json:"userId"`
 		Password string `json:"password"`
 	}
-	UserDeleteResp  {
-		UserId int64 `json:"userId"`
+	UserDeleteResp {
+		User User `json:"user"`
 	}
 )
 
 type ( // 修改
 	UserUpdateReq {
-		UserId    int64  `json:"userID"`
-		Phone     string `json:"phone"`
-		Email     string `json:"email"`
-		Password  string `json:"password"`
-		NickName  string `json:"nickName"`
-		Avatar    string `json:"avatar"`
-		Gender    string `json:"gender"`
-		BirthDate int64  `json:"birthDate"`
-		Role      string `json:"role"`
-		Status    int64  `json:"status"`
+		User User `json:"user"`
 	}
-	UserUpdateResp  {
-		UserId int64 `json:"userId"`
+	UserUpdateResp {
+		User User `json:"user"`
 	}
 )
 
 type ( // 查询
 	UserQueryReq {
-		UserId int64 `form:"userId"`
+		UserId int64 `json"userId"`
 	}
 	UserQueryResp {
-		UserId    int64  `json:"userId"`
-		Phone     string `json:"phone"`
-		Email     string `json:"email"`
-		Password  string `json:"password"`
-		NickName  string `json:"nickName"`
-		Avatar    string `json:"avatar"`
-		Gender    string `json:"gender"`
-		BirthDate int64  `json:"birthDate"`
-		Role      string `json:"role"`
-		Status    int64  `json:"status"`
+		User User `json:"user"`
 	}
 )
 
@@ -102,12 +101,60 @@ type ( // 查询
 )
 service user {
 	@handler userDelete
-	delete /user/delete (UserDeleteReq) returns (UserDeleteResp)
+	post /user/delete (UserDeleteReq) returns (UserDeleteResp)
 
 	@handler userUpdate
-	put /user/update (UserUpdateReq) returns (UserUpdateResp)
+	post /user/update (UserUpdateReq) returns (UserUpdateResp)
 
 	@handler userQuery
-	get /user/query (UserQueryReq) returns (UserQueryResp)
+	post /user/query (UserQueryReq) returns (UserQueryResp)
+}
+
+type (
+	Relations {
+		RelationsId      int64 `json:"relationsId"`
+		UserId           int64 `json:"userId"`
+		OtherId          int64 `json:"otherId"`
+		RelationshipType int64 `json:"relationshipType"`
+		CreateAt         int64 `json:"createAt"`
+		UpdateAt         int64 `json:"updateAt"`
+	}
+)
+
+type (
+	UserRelationsUpdateReq {
+		UserId           int64 `json:"userId"`
+		OUserId          int64 `json:"oUserId"`
+		relationshipType int64 `json:"relations"`
+	}
+	UserRelationsUpdateResp {
+		Relations Relations `json:"relations"`
+	}
+)
+
+type (
+	UserRelationsGetReq {
+		UserId  int64 `json:"userId"`
+		OUserId int64 `json:"oUserId"`
+	}
+	UserRelationsGetResp {
+		Relations Relations `json:"relations"`
+	}
+)
+
+@server (
+	group:      relations // 统一管理用户相关 API
+	prefix:     /v1 // v1 版本
+	timeout:    3s // 超时时间
+	maxBytes:   1048576 // 最大结构体
+	middleware: Middleware // 中间件
+	jwt:        Auth // JWT 认证
+)
+service user {
+	@handler userRelationsUpdate
+	post /userRelations/update (UserRelationsUpdateReq) returns (UserRelationsUpdateResp)
+
+	@handler userRelationsGet
+	post /userRelations/get (UserRelationsGetReq) returns (UserRelationsGetResp)
 }
 

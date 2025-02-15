@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	relations "movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/handler/relations"
 	user "movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/handler/user"
 	"movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/svc"
 
@@ -14,6 +15,28 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Middleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/userRelations/get",
+					Handler: relations.UserRelationsGetHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/userRelations/update",
+					Handler: relations.UserRelationsUpdateHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1"),
+		rest.WithTimeout(3000*time.Millisecond),
+		rest.WithMaxBytes(1048576),
+	)
+
 	server.AddRoutes(
 		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Middleware},
@@ -40,17 +63,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.Middleware},
 			[]rest.Route{
 				{
-					Method:  http.MethodDelete,
+					Method:  http.MethodPost,
 					Path:    "/user/delete",
 					Handler: user.UserDeleteHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodGet,
+					Method:  http.MethodPost,
 					Path:    "/user/query",
 					Handler: user.UserQueryHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodPut,
+					Method:  http.MethodPost,
 					Path:    "/user/update",
 					Handler: user.UserUpdateHandler(serverCtx),
 				},

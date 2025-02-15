@@ -5,4 +5,14 @@ Etcd:
   - 0.0.0.0:2379
   Key: user.rpc
 DB:
-  DataSource: root:123456@tcp(127.0.0.1:3306)/movieReviewSystemApi
+  User:
+    Url: mongodb://localhost:27017
+    Db: user
+    Conn: user
+  UserRelations:
+    Url: mongodb://localhost:27017
+    Db: user
+    Conn: userRelations
+Auth:
+  AccessSecret: "xiangongyedaxuzhangxuanshiye"
+  AccessExpire: 6000

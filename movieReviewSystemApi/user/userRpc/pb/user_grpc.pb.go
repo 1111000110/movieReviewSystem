@@ -19,11 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_UserLogin_FullMethodName    = "/user.UserService/UserLogin"
-	UserService_UserRegister_FullMethodName = "/user.UserService/UserRegister"
-	UserService_UserDelete_FullMethodName   = "/user.UserService/UserDelete"
-	UserService_UserUpdate_FullMethodName   = "/user.UserService/UserUpdate"
-	UserService_UserQuery_FullMethodName    = "/user.UserService/UserQuery"
+	UserService_UserLogin_FullMethodName           = "/user.UserService/UserLogin"
+	UserService_UserRegister_FullMethodName        = "/user.UserService/UserRegister"
+	UserService_UserDelete_FullMethodName          = "/user.UserService/UserDelete"
+	UserService_UserUpdate_FullMethodName          = "/user.UserService/UserUpdate"
+	UserService_UserQuery_FullMethodName           = "/user.UserService/UserQuery"
+	UserService_UserRelationsUpdate_FullMethodName = "/user.UserService/UserRelationsUpdate"
+	UserService_UserRelationsGet_FullMethodName    = "/user.UserService/UserRelationsGet"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -37,6 +39,8 @@ type UserServiceClient interface {
 	UserDelete(ctx context.Context, in *UserDeleteReq, opts ...grpc.CallOption) (*UserDeleteResp, error)
 	UserUpdate(ctx context.Context, in *UserUpdateReq, opts ...grpc.CallOption) (*UserUpdateResp, error)
 	UserQuery(ctx context.Context, in *UserQueryReq, opts ...grpc.CallOption) (*UserQueryResp, error)
+	UserRelationsUpdate(ctx context.Context, in *UserRelationsUpdateReq, opts ...grpc.CallOption) (*UserRelationsUpdateResp, error)
+	UserRelationsGet(ctx context.Context, in *UserRelationsGetReq, opts ...grpc.CallOption) (*UserRelationsGetResp, error)
 }
 
 type userServiceClient struct {
@@ -97,6 +101,26 @@ func (c *userServiceClient) UserQuery(ctx context.Context, in *UserQueryReq, opt
 	return out, nil
 }
 
+func (c *userServiceClient) UserRelationsUpdate(ctx context.Context, in *UserRelationsUpdateReq, opts ...grpc.CallOption) (*UserRelationsUpdateResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserRelationsUpdateResp)
+	err := c.cc.Invoke(ctx, UserService_UserRelationsUpdate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UserRelationsGet(ctx context.Context, in *UserRelationsGetReq, opts ...grpc.CallOption) (*UserRelationsGetResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserRelationsGetResp)
+	err := c.cc.Invoke(ctx, UserService_UserRelationsGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -108,6 +132,8 @@ type UserServiceServer interface {
 	UserDelete(context.Context, *UserDeleteReq) (*UserDeleteResp, error)
 	UserUpdate(context.Context, *UserUpdateReq) (*UserUpdateResp, error)
 	UserQuery(context.Context, *UserQueryReq) (*UserQueryResp, error)
+	UserRelationsUpdate(context.Context, *UserRelationsUpdateReq) (*UserRelationsUpdateResp, error)
+	UserRelationsGet(context.Context, *UserRelationsGetReq) (*UserRelationsGetResp, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -132,6 +158,12 @@ func (UnimplementedUserServiceServer) UserUpdate(context.Context, *UserUpdateReq
 }
 func (UnimplementedUserServiceServer) UserQuery(context.Context, *UserQueryReq) (*UserQueryResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserQuery not implemented")
+}
+func (UnimplementedUserServiceServer) UserRelationsUpdate(context.Context, *UserRelationsUpdateReq) (*UserRelationsUpdateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserRelationsUpdate not implemented")
+}
+func (UnimplementedUserServiceServer) UserRelationsGet(context.Context, *UserRelationsGetReq) (*UserRelationsGetResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserRelationsGet not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -244,6 +276,42 @@ func _UserService_UserQuery_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_UserRelationsUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRelationsUpdateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UserRelationsUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UserRelationsUpdate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UserRelationsUpdate(ctx, req.(*UserRelationsUpdateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UserRelationsGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRelationsGetReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UserRelationsGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UserRelationsGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UserRelationsGet(ctx, req.(*UserRelationsGetReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -270,6 +338,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserQuery",
 			Handler:    _UserService_UserQuery_Handler,
+		},
+		{
+			MethodName: "UserRelationsUpdate",
+			Handler:    _UserService_UserRelationsUpdate_Handler,
+		},
+		{
+			MethodName: "UserRelationsGet",
+			Handler:    _UserService_UserRelationsGet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -14,16 +14,22 @@ import (
 )
 
 type (
-	UserDeleteReq    = __.UserDeleteReq
-	UserDeleteResp   = __.UserDeleteResp
-	UserLoginReq     = __.UserLoginReq
-	UserLoginResp    = __.UserLoginResp
-	UserQueryReq     = __.UserQueryReq
-	UserQueryResp    = __.UserQueryResp
-	UserRegisterReq  = __.UserRegisterReq
-	UserRegisterResp = __.UserRegisterResp
-	UserUpdateReq    = __.UserUpdateReq
-	UserUpdateResp   = __.UserUpdateResp
+	Relations               = __.Relations
+	User                    = __.User
+	UserDeleteReq           = __.UserDeleteReq
+	UserDeleteResp          = __.UserDeleteResp
+	UserLoginReq            = __.UserLoginReq
+	UserLoginResp           = __.UserLoginResp
+	UserQueryReq            = __.UserQueryReq
+	UserQueryResp           = __.UserQueryResp
+	UserRegisterReq         = __.UserRegisterReq
+	UserRegisterResp        = __.UserRegisterResp
+	UserRelationsGetReq     = __.UserRelationsGetReq
+	UserRelationsGetResp    = __.UserRelationsGetResp
+	UserRelationsUpdateReq  = __.UserRelationsUpdateReq
+	UserRelationsUpdateResp = __.UserRelationsUpdateResp
+	UserUpdateReq           = __.UserUpdateReq
+	UserUpdateResp          = __.UserUpdateResp
 
 	UserService interface {
 		UserLogin(ctx context.Context, in *UserLoginReq, opts ...grpc.CallOption) (*UserLoginResp, error)
@@ -31,6 +37,8 @@ type (
 		UserDelete(ctx context.Context, in *UserDeleteReq, opts ...grpc.CallOption) (*UserDeleteResp, error)
 		UserUpdate(ctx context.Context, in *UserUpdateReq, opts ...grpc.CallOption) (*UserUpdateResp, error)
 		UserQuery(ctx context.Context, in *UserQueryReq, opts ...grpc.CallOption) (*UserQueryResp, error)
+		UserRelationsUpdate(ctx context.Context, in *UserRelationsUpdateReq, opts ...grpc.CallOption) (*UserRelationsUpdateResp, error)
+		UserRelationsGet(ctx context.Context, in *UserRelationsGetReq, opts ...grpc.CallOption) (*UserRelationsGetResp, error)
 	}
 
 	defaultUserService struct {
@@ -67,4 +75,14 @@ func (m *defaultUserService) UserUpdate(ctx context.Context, in *UserUpdateReq, 
 func (m *defaultUserService) UserQuery(ctx context.Context, in *UserQueryReq, opts ...grpc.CallOption) (*UserQueryResp, error) {
 	client := __.NewUserServiceClient(m.cli.Conn())
 	return client.UserQuery(ctx, in, opts...)
+}
+
+func (m *defaultUserService) UserRelationsUpdate(ctx context.Context, in *UserRelationsUpdateReq, opts ...grpc.CallOption) (*UserRelationsUpdateResp, error) {
+	client := __.NewUserServiceClient(m.cli.Conn())
+	return client.UserRelationsUpdate(ctx, in, opts...)
+}
+
+func (m *defaultUserService) UserRelationsGet(ctx context.Context, in *UserRelationsGetReq, opts ...grpc.CallOption) (*UserRelationsGetResp, error) {
+	client := __.NewUserServiceClient(m.cli.Conn())
+	return client.UserRelationsGet(ctx, in, opts...)
 }

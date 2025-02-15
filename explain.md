@@ -4,13 +4,27 @@
 1. 用户注册
 ```api
 type ( // 注册
+    User{
+        UserId    int64  `json:"userId"`
+        Phone     string `json:"phone"`
+        Email     string `json:"email"`
+        Password  string `json:"password"`
+        NickName  string `json:"nickName"`
+        Avatar    string `json:"avatar"`
+        Gender    string `json:"gender"`
+        BirthDate int64  `json:"birthDate"`
+        Role      string `json:"role"`
+        Status    int64  `json:"status"`
+        CreateAt int64 `json:"createAt"`
+        UpdateAt int64 `json:"updateAt"`
+    }
 	UserRegisterReq {
 		Phone    string `json:"phone"`
 		Password string `json:"password"`
 		Role     string `json:"role"`
 	}
 	UserRegisterResp {
-		UserId int64 `json:"userId"`
+        User    User `json:"user"`
 	}
 )
 ```
@@ -30,74 +44,142 @@ type ( // 登录
 3. 用户修改信息
 ```api
 type ( // 修改
+    User{
+        UserId    int64  `json:"userId"`
+        Phone     string `json:"phone"`
+        Email     string `json:"email"`
+        Password  string `json:"password"`
+        NickName  string `json:"nickName"`
+        Avatar    string `json:"avatar"`
+        Gender    string `json:"gender"`
+        BirthDate int64  `json:"birthDate"`
+        Role      string `json:"role"`
+        Status    int64  `json:"status"`
+    }
 	UserUpdateReq {
-		UserId    int64  `json:"userId"`
-		Phone     string `json:"phone"`
-		Email     string `json:"email"`
-		Password  string `json:"password"`
-		NickName  string `json:"nickName"`
-		Avatar    string `json:"avatar"`
-		Gender    string `json:"gender"`
-		BirthDate int64  `json:"birthDate"`
-		Role      string `json:"role"`
-		Status    int64  `json:"status"`
+		User    User `json:"user"`
 	}
 	UserUpdateResp  {
-        UserId int64 `json:"userId"`
+        User    User `json:"user"`
     }
 )
 ```
 4. 用户注销账号
 ```api
 type ( // 删除
+    User{
+        UserId    int64  `json:"userId"`
+        Phone     string `json:"phone"`
+        Email     string `json:"email"`
+        Password  string `json:"password"`
+        NickName  string `json:"nickName"`
+        Avatar    string `json:"avatar"`
+        Gender    string `json:"gender"`
+        BirthDate int64  `json:"birthDate"`
+        Role      string `json:"role"`
+        Status    int64  `json:"status"`
+    }
 	UserDeleteReq {
 		Phone    string `json:"phone"` // 根据手机号删除用户
 		UserId   int64  `json:"userId"`
 		Password string `json:"password"`
 	}
 	UserDeleteResp  {
-        UserId int64 `json:"userId"`
+        User User   `json:"user"`
     }
 )
 ```
 5. 获取用户信息
 ```api
 type ( // 查询
+    User{
+        UserId    int64  `json:"userId"`
+        Phone     string `json:"phone"`
+        Email     string `json:"email"`
+        Password  string `json:"password"`
+        NickName  string `json:"nickName"`
+        Avatar    string `json:"avatar"`
+        Gender    string `json:"gender"`
+        BirthDate int64  `json:"birthDate"`
+        Role      string `json:"role"`
+        Status    int64  `json:"status"`
+    }
+    
 	UserQueryReq {
-		UserId int64 `form:"userId"` 
+		UserId int64 `json:"userId"` 
 	}
 	UserQueryResp {
-		UserId    int64  `json:"userId"`
-		Phone     string `json:"phone"`
-		Email     string `json:"email"`
-		Password  string `json:"password"`
-		NickName  string `json:"nickName"`
-		Avatar    string `json:"avatar"`
-		Gender    string `json:"gender"`
-		BirthDate int64  `json:"birthDate"`
-		Role      string `json:"role"`
-		Status    int64  `json:"status"`
+		User User `json:"user"`
 	}
 )
 ```
+6. 用户修改关系
+```api
+type (
+    Relations{
+        RelationsId int64 `json:"relationsId"`
+        UserId int64    `json:"userId"`
+        OtherId int64   `json:"otherId"`
+        RelationshipType int64 `json:"relationshipType"`
+        CreateAt int64       `json:"createAt"`
+        UpdateAt int64       `json:"updateAt"`
+    }
+
+    UserRelationsUpdateReq{
+        UserId int64 `json:"userId"`
+        OUserId int64 `json:"oUserId"`
+        relationshipType int64 `json:"relations"`
+    }
+    UserRelationsUpdateResp{
+        Relations Relations    `json:"relations"`
+    }
+)
+```
+7. 用户查询关系
+```api
+type (
+    Relations{
+        RelationsId int64 `json:"relationsId"`
+        UserId int64    `json:"userId"`
+        OtherId int64   `json:"otherId"`
+        RelationshipType int64 `json:"relationshipType"`
+        CreateAt int64       `json:"createAt"`
+        UpdateAt int64       `json:"updateAt"`
+    }
+
+    UserRelationsGetReq{
+        UserId int64 `json:"userId"`
+        OUserId int64 `json:"oUserId"`
+    }
+    UserRelationsGetResp{
+        Relations Relations    `json:"relations"`
+    }
+)
+```
 ### 数据库表
-1. 用户数据表(mysql)
-```mysql
-CREATE TABLE users (
-   userId BIGINT AUTO_INCREMENT,
-   phone VARCHAR(255)  NOT NULL UNIQUE ,
-   email VARCHAR(255) ,
-   password VARCHAR(255) NOT NULL,
-   nickName VARCHAR(255),
-   avatar VARCHAR(255),
-   gender VARCHAR(10),
-   birthDate BIGINT,
-   role VARCHAR(50),
-   status BIGINT,
-    createDate BIGINT,
-    updataDate BIGINT,
-   PRIMARY KEY (userId)
-);
+1. 用户表
+```mongo
+userId int64,
+phone string ,
+email string ,
+password string,
+nickName string,
+avatar string,
+gender int64,
+birthDate int64,
+role string,
+status int64,
+createAt int64,     
+updateAt int64,    
+```
+2. 用户关系表
+```mongo
+relationsId int64,
+userId int64,
+otherId int64,
+relationshipType int64,
+createAt int64,     
+updateAt int64, 
 ```
 ## 群组服务
 为了适配聊天服务的群聊机制，实现群组服务。
