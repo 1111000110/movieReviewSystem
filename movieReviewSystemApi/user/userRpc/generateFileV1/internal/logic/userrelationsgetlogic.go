@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+	relationsModel "movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/userRelations"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UserRelationsGetLogic struct {
@@ -25,9 +25,17 @@ func NewUserRelationsGetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *UserRelationsGetLogic) UserRelationsGet(in *__.UserRelationsGetReq) (*__.UserRelationsGetResp, error) {
 	// todo: add your logic here and delete this line
-	if in.GetUserId() < in.GetOUserId() {
-		//l.svcCtx.UserRelationsModel.FindOne()
+	var data *relationsModel.UserRelations
+	var err error
+	data, err = l.svcCtx.UserRelationsModel.FindRelationsByUserIdAndOtherId(l.ctx, in.GetUserId(), in.GetOUserId())
+	if err != nil || data == nil {
+		return nil, err
 	}
-
-	return &__.UserRelationsGetResp{}, nil
+	UserRelations, err := __.ModelUserRelationsToUserRelations(*data)
+	if err != nil {
+		return nil, err
+	}
+	return &__.UserRelationsGetResp{
+		Relations: &UserRelations,
+	}, nil
 }

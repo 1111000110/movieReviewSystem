@@ -9,13 +9,13 @@ import (
 type ServiceContext struct {
 	Config             config.Config
 	UsersModel         model.UserModel
-	UserRelationsModel relationsModel.UserRealtiosnModel
+	UserRelationsModel relationsModel.UserRelationsModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:             c,
 		UsersModel:         model.NewUserModel(c.DB.User.Url, c.DB.User.Db, c.DB.User.Collection),
-		UserRelationsModel: relationsModel.NewUserRealtiosnModel(c.DB.UserRelations.Url, c.DB.UserRelations.Db, c.DB.UserRelations.Collection),
+		UserRelationsModel: relationsModel.NewUserRelationsModel(c.DB.UserRelations.Url, c.DB.UserRelations.Db, c.DB.UserRelations.Collection),
 	}
 }

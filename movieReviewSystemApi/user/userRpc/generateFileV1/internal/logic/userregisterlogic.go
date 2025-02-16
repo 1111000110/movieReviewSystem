@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"math/rand"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
 	model "movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user"
+	"strconv"
 	"time"
 
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
@@ -29,12 +29,14 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 		Logger: logx.WithContext(ctx),
 	}
 }
-func generateFormattedString() string {
+func NewUserId() (int64, error) {
+	// 定义随机数生成函数
+	rand.Seed(time.Now().UnixNano())
 	random := func() string {
-		rand.Seed(time.Now().UnixNano())
-		result := fmt.Sprintf("%d", rand.Intn(10)) // 随机生成0-9的数字
-		return result
+		return fmt.Sprintf("%d", rand.Intn(10)) // 随机生成0-999的三位数字
 	}
+
+	// 定义获取时间戳后8位的函数
 	timestampLast8Digits := func() string {
 		timestamp := time.Now().Unix() // 获取当前时间戳（秒级）
 		timestampStr := fmt.Sprintf("%d", timestamp)
@@ -44,8 +46,13 @@ func generateFormattedString() string {
 		}
 		return timestampStr[length-8:] // 返回最后8位
 	}
-	timestampPart := timestampLast8Digits() // 获取时间戳的后8位
-	return fmt.Sprintf("%s%s%s%s%s%s%s", random(), timestampPart[:1], random(), timestampPart[1:5], random(), timestampPart[5:8], random())
+
+	// 获取时间戳的后8位
+	timestampPart := timestampLast8Digits()
+
+	// 按照指定格式拼接字符串
+	UserIdString := fmt.Sprintf("%s%s%s%s%s%s%s", random(), timestampPart[:1], random(), timestampPart[1:5], random(), timestampPart[5:8], random())
+	return strconv.ParseInt(UserIdString, 10, 64)
 }
 
 func (l *UserRegisterLogic) UserRegister(in *__.UserRegisterReq) (*__.UserRegisterResp, error) {
@@ -61,7 +68,7 @@ func (l *UserRegisterLogic) UserRegister(in *__.UserRegisterReq) (*__.UserRegist
 	if err != nil {
 		return nil, err
 	}
-	userId, err := primitive.ObjectIDFromHex(generateFormattedString())
+	userId, err := NewUserId()
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +85,7 @@ func (l *UserRegisterLogic) UserRegister(in *__.UserRegisterReq) (*__.UserRegist
 		return nil, err
 	}
 	return &__.UserRegisterResp{User: &__.User{
-		UserId: model.GetUserIdByID(insertData.ID),
+		UserId: insertData.ID,
 		Role:   insertData.Role,
 	}}, err
 }

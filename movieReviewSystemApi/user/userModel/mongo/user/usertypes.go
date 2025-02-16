@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID primitive.ObjectID `bson:"_id,omitempty" json:"userId,omitempty"`
+	ID int64 `bson:"_id,omitempty" json:"userId,omitempty"`
 	// TODO: Fill your own fields
 	Phone     string `bson:"phone" json:"phone"`
 	Email     string `bson:"email" json:"email"`

@@ -1,10 +1,9 @@
 package __
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
 	model "movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user"
-	"strconv"
+	relationsModel "movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/userRelations"
 )
 
 func ModelUserToUser(user model.User) (User, error) {
@@ -16,9 +15,8 @@ func ModelUserToUser(user model.User) (User, error) {
 			return User{}, err
 		}
 	}
-	UserId := model.GetUserIdByID(user.ID)
 	return User{
-		UserId:    UserId,
+		UserId:    user.ID,
 		Phone:     phone,
 		Email:     user.Email,
 		Password:  user.Password,
@@ -41,15 +39,8 @@ func UserToModelUser(user User) (model.User, error) {
 			return model.User{}, err
 		}
 	}
-	var modelUserId primitive.ObjectID
-	if user.UserId == 0 {
-		modelUserId, err = primitive.ObjectIDFromHex(strconv.FormatInt(user.UserId, 10))
-		if err != nil {
-			return model.User{}, err
-		}
-	}
 	return model.User{
-		ID:        modelUserId,
+		ID:        user.UserId,
 		Phone:     phone,
 		Email:     user.Email,
 		Password:  user.Password,
@@ -61,5 +52,25 @@ func UserToModelUser(user User) (model.User, error) {
 		Status:    user.Status,
 		CreateAt:  user.CreateAt,
 		UpdateAt:  user.UpdateAt,
+	}, nil
+}
+func ModelUserRelationsToUserRelations(user relationsModel.UserRelations) (Relations, error) {
+	return Relations{
+		RelationsId:      user.ID,
+		UserId:           user.UserId,
+		OtherId:          user.OtherId,
+		RelationshipType: user.RelationshipType,
+		CreateAt:         user.CreateAt,
+		UpdateAt:         user.UpdateAt,
+	}, nil
+}
+func UserRelationsToModelUserRelations(user Relations) (relationsModel.UserRelations, error) {
+	return relationsModel.UserRelations{
+		ID:               user.RelationsId,
+		UserId:           user.UserId,
+		OtherId:          user.OtherId,
+		RelationshipType: user.RelationshipType,
+		CreateAt:         user.CreateAt,
+		UpdateAt:         user.UpdateAt,
 	}, nil
 }

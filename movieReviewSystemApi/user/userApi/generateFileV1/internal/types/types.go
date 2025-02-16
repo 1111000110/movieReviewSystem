@@ -19,7 +19,7 @@ type User struct {
 	Password  string `json:"password"`
 	NickName  string `json:"nickName"`
 	Avatar    string `json:"avatar"`
-	Gender    string `json:"gender"`
+	Gender    int64  `json:"gender"`
 	BirthDate int64  `json:"birthDate"`
 	Role      string `json:"role"`
 	Status    int64  `json:"status"`

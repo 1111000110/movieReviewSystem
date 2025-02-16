@@ -34,15 +34,15 @@ func (l *UserQueryLogic) UserQuery(req *types.UserQueryReq) (resp *types.UserQue
 	}
 	resp = &types.UserQueryResp{
 		User: types.User{
-			UserId:    respData.UserId,
-			Phone:     respData.Phone,
-			Email:     respData.Email,
-			NickName:  respData.NickName,
-			Avatar:    respData.Avatar,
-			Gender:    respData.Gender,
-			BirthDate: respData.BirthDate,
-			Role:      respData.Role,
-			Status:    respData.Status,
+			UserId:    respData.User.UserId,
+			Phone:     respData.User.Phone,
+			Email:     respData.User.Email,
+			NickName:  respData.User.Nickname,
+			Avatar:    respData.User.Avatar,
+			Gender:    respData.User.Gender,
+			BirthDate: respData.User.BirthDate,
+			Role:      respData.User.Role,
+			Status:    respData.User.Status,
 		},
 	}
 	return

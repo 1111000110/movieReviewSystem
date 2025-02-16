@@ -26,16 +26,18 @@ func (l *UserUpdateLogic) UserUpdate(req *types.UserUpdateReq) (resp *types.User
 	// todo: add your logic here and delete this line
 	if l.ctx.Value("user_id").(int64) == req.User.UserId {
 		_, err = l.svcCtx.UserRpcService.UserUpdate(l.ctx, &userservice.UserUpdateReq{
-			UserId:    req.UserId,
-			Phone:     req.Phone,
-			Email:     req.Email,
-			Password:  req.Password,
-			NickName:  req.NickName,
-			Avatar:    req.Avatar,
-			Gender:    req.Gender,
-			BirthDate: req.BirthDate,
-			Role:      req.Role,
-			Status:    req.Status,
+			User: &userservice.User{
+				UserId:    req.User.UserId,
+				Phone:     req.User.Phone,
+				Email:     req.User.Email,
+				Password:  req.User.Password,
+				Nickname:  req.User.NickName,
+				Avatar:    req.User.Avatar,
+				Gender:    req.User.Gender,
+				BirthDate: req.User.BirthDate,
+				Role:      req.User.Role,
+				Status:    req.User.Status,
+			},
 		})
 	}
 	return &types.UserUpdateResp{}, err

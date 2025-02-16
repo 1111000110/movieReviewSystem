@@ -2,8 +2,6 @@ package logic
 
 import (
 	"context"
-	"strconv"
-
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
 
@@ -26,7 +24,7 @@ func NewUserQueryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserQue
 
 func (l *UserQueryLogic) UserQuery(in *__.UserQueryReq) (*__.UserQueryResp, error) {
 	// todo: add your logic here and delete this line
-	queryResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.GetUserId(), 10))
+	queryResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUserId())
 	if err != nil || queryResp == nil {
 		return nil, err
 	}

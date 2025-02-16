@@ -2,13 +2,10 @@ package user
 
 import (
 	"context"
-	"movieReviewSystem/movieReviewSystemApi/shared/tool"
+	"github.com/zeromicro/go-zero/core/logx"
 	"movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userApi/generateFileV1/internal/types"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/userservice"
-	"time"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UserLoginLogic struct {
@@ -32,12 +29,9 @@ func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLog
 		Password: req.Password,
 		UserId:   req.UserId,
 	})
-	if err != nil || userResp.GetUserId() == 0 {
+	if err != nil {
 		return nil, err
 	}
-	tokenString, err := tool.CreateToken(userResp.GetUserId(), time.Duration(l.svcCtx.Config.Auth.AccessExpire)*time.Second, l.svcCtx.Config.Auth.AccessSecret)
-	resp = &types.UserLoginResp{
-		Token: tokenString,
-	}
+	resp.Token = userResp.Token
 	return resp, nil
 }

@@ -27,11 +27,11 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterReq) (resp *types.UserRegisterResp, err error) {
 	// todo: add your logic here and delete this line
 	registerResp, err := l.svcCtx.UserRpcService.UserRegister(l.ctx, &__.UserRegisterReq{Phone: req.Phone, Password: req.Password, Role: req.Role})
-	if err != nil || registerResp == nil {
+	if err != nil {
 		return nil, err
 	}
 	resp = &types.UserRegisterResp{
-		UserId: registerResp.UserId,
+		User: types.User{UserId: registerResp.User.GetUserId()},
 	}
 	return
 }

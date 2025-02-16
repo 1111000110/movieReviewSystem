@@ -6,7 +6,6 @@ import (
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
-	"strconv"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,7 +26,7 @@ func NewUserUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserUp
 }
 
 func (l *UserUpdateLogic) UserUpdate(in *__.UserUpdateReq) (*__.UserUpdateResp, error) {
-	userResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.GetUser().GetUserId(), 10))
+	userResp, err := l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUser().GetUserId())
 	if err != nil {
 		return nil, err
 	}

@@ -3,8 +3,6 @@ package logic
 import (
 	"context"
 	"movieReviewSystem/movieReviewSystemApi/shared/tool"
-	"strconv"
-
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
 
@@ -27,7 +25,7 @@ func NewUserDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserDe
 
 func (l *UserDeleteLogic) UserDelete(in *__.UserDeleteReq) (*__.UserDeleteResp, error) {
 	// todo: add your logic here and delete this line
-	respData, err := l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.UserId, 10))
+	respData, err := l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUserId())
 	if err != nil {
 		return nil, err
 	}

@@ -2,17 +2,17 @@ Name: user.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-  - 0.0.0.0:2379
+  - 127.0.0.1:2379
   Key: user.rpc
 DB:
   User:
     Url: mongodb://localhost:27017
     Db: user
-    Conn: user
+    Collection: user
   UserRelations:
     Url: mongodb://localhost:27017
     Db: user
-    Conn: userRelations
-Auth:
-  AccessSecret: "xiangongyedaxuzhangxuanshiye"
+    Collection: userRelations
+AuthConf:
+  AccessSecret: xiangongyedaxuzhangxuanshiye
   AccessExpire: 6000

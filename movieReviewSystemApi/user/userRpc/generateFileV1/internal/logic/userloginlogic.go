@@ -7,7 +7,6 @@ import (
 	"movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/generateFileV1/internal/svc"
 	"movieReviewSystem/movieReviewSystemApi/user/userRpc/pb"
-	"strconv"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -33,7 +32,7 @@ func (l *UserLoginLogic) UserLogin(in *__.UserLoginReq) (*__.UserLoginResp, erro
 	var err error
 	switch {
 	case in.GetUserId() != 0:
-		userResp, err = l.svcCtx.UsersModel.FindOne(l.ctx, strconv.FormatInt(in.GetUserId(), 10))
+		userResp, err = l.svcCtx.UsersModel.FindOne(l.ctx, in.GetUserId())
 	case in.GetPhone() != "":
 		phone, err := tool.Encrypt(in.Phone)
 		if err != nil {
@@ -46,11 +45,11 @@ func (l *UserLoginLogic) UserLogin(in *__.UserLoginReq) (*__.UserLoginResp, erro
 	if err != nil || userResp == nil {
 		return nil, err
 	}
-	tokenString, err := tool.CreateToken(model.GetUserIdByID(userResp.ID), time.Duration(l.svcCtx.Config.Auth.AccessExpire)*time.Second, l.svcCtx.Config.Auth.AccessSecret)
+	tokenString, err := tool.CreateToken(userResp.ID, time.Duration(l.svcCtx.Config.AuthConf.AccessExpire)*time.Second, l.svcCtx.Config.AuthConf.AccessSecret)
 	if tool.ComparePassword(userResp.Password, in.GetPassword()) && userResp.Status != __.Account_cancellation {
 		return &__.UserLoginResp{
 			Token: tokenString,
 		}, err
 	}
-	return nil, err
+	return nil, errors.New("password or phone err")
 }

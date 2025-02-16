@@ -18,7 +18,7 @@ type Config struct {
 			Collection string
 		}
 	}
-	Auth struct {
+	AuthConf struct {
 		AccessSecret string
 		AccessExpire int64
 	}
