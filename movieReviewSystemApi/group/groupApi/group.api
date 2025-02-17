@@ -1,56 +1,72 @@
-syntax ="v1"
-info(
-    title:   "群组模块"
-    desc:    "群组模块"
-    author:  "张璇"
-    email:   "xatuzx2025@163.com"
-    version: "1.0"
-)
-type(//
-    GroupCreateReq{//用户创建群组请求
-        GroupName string `json:"groupName"`
-        GroupUrl string `json:"groupUrl"`
-        RootUserId int64    `json:"rootUserId"`
-    }
-    GroupCreateResp{//用户创建群组响应
-        GroupId int64 `json:"groupId"`
-    }
+syntax = "v1"
+
+info (
+	title:   "群组模块"
+	desc:    "群组模块"
+	author:  "张璇"
+	email:   "xatuzx2025@163.com"
+	version: "1.0"
 )
 
-type(
-    GroupUserIdReq{//用户拉/删人请求
-        UserId int64 `json:"userId"`
-        AddUserId int64 `json:"addUserId"`
-        GroupId int64 `json:"groupId"`
-        Status int64 `json:"status"`
-    }
-    GroupUserIdResp{}
+type ( //
+	GroupCreateReq { //用户创建群组请求
+		GroupName  string `json:"groupName"`
+		GroupUrl   string `json:"groupUrl"`
+		RootUserId int64  `json:"rootUserId"`
+	}
+	GroupCreateResp { //用户创建群组响应
+		GroupId int64 `json:"groupId"`
+	}
 )
 
-type(
-    GroupAdminIdReq{//用户管理员请求
-        UserId int64 `json:"userId"`
-        AdminId int64 `json:"addUserId"`
-        GroupId int64 `json:"groupId"`
-        Status int64 `json:"status"`
-    }
-    GroupAdminIdResp{}
+type (
+	GroupUserIdReq { //用户拉/删人请求
+		UserId    int64 `json:"userId"`
+		AddUserId int64 `json:"addUserId"`
+		GroupId   int64 `json:"groupId"`
+		Status    int64 `json:"status"`
+	}
+	GroupUserIdResp  {}
 )
-type(
-    GroupDeleteReq{
-        UserId int64 `json:"userId"`
-        GroupId int64 `json:"groupId"`
-        Status int64 `json:"status"`
-    }
-    GroupDeleteResp{}
+
+type (
+	GroupAdminIdReq { //用户管理员增加删除请求
+		UserId  int64 `json:"userId"`
+		AdminId int64 `json:"addUserId"`
+		GroupId int64 `json:"groupId"`
+		Status  int64 `json:"status"`
+	}
+	GroupAdminIdResp  {}
 )
-//
-//groupId int64
-//groupName string
-//groupUrl string
-//rootUserId int64
-//mamageUserId []int64
-//UserId []int64
-//status int64
-//createDate int64
-//updateDate int64
+
+type (
+	GroupDeleteReq {
+		UserId  int64 `json:"userId"`
+		GroupId int64 `json:"groupId"`
+		Status  int64 `json:"status"`
+	}
+	GroupDeleteResp  {}
+)
+
+@server (
+	group:      group // 统一管理用户相关 API
+	prefix:     /v1 // v1 版本
+	timeout:    3s // 超时时间
+	maxBytes:   1048576 // 最大结构体
+	middleware: Middleware // 中间件
+	jwt:        Auth // JWT 认证
+)
+service group {
+	@handler groupCreate
+	post /group/create (GroupCreateReq) returns (GroupCreateResp)
+
+	@handler groupUser
+	post /group/user (GroupUserIdReq) returns (GroupUserIdResp)
+
+	@handler groupAdmin
+	post /group/admin (GroupAdminIdReq) returns (GroupAdminIdResp)
+
+	@handler groupDelete
+	post /group/delete (GroupDeleteReq) returns (GroupDeleteResp)
+}
+

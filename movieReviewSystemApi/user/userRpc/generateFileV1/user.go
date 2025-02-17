@@ -20,13 +20,9 @@ var configFile = flag.String("f", "etc/user.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-	fmt.Printf("123")
 	var c config.Config
-	fmt.Printf("123")
 	conf.MustLoad(*configFile, &c)
-	fmt.Printf("123")
 	ctx := svc.NewServiceContext(c)
-	fmt.Printf("123")
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		__.RegisterUserServiceServer(grpcServer, server.NewUserServiceServer(ctx))
 
