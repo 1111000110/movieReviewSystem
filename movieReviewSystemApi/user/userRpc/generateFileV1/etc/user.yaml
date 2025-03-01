@@ -6,11 +6,11 @@ Etcd:
   Key: user.rpc
 DB:
   User:
-    Url: mongodb://localhost:27017
+    Url: mongodb://admin:admin123@localhost:27017/?authSource=admin
     Db: user
     Collection: user
   UserRelations:
-    Url: mongodb://localhost:27017
+    Url: mongodb://admin:admin123@localhost:27017/?authSource=admin
     Db: user
     Collection: userRelations
 AuthConf:

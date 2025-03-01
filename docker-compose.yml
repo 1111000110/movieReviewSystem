@@ -25,5 +25,40 @@ services:
     volumes:
       - kafka-data:/var/lib/kafka/data
 
+  # 添加 MongoDB 服务
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin # 设置管理员用户名
+      MONGO_INITDB_ROOT_PASSWORD: admin123 # 设置管理员密码
+    volumes:
+      - mongo-data:/data/db # 数据存储路径
+
+  # 添加 MySQL 服务
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123 # 设置 root 用户密码
+      MYSQL_DATABASE: testdb # 设置初始数据库
+      MYSQL_USER: testuser # 设置普通用户
+      MYSQL_PASSWORD: testuser123 # 设置普通用户密码
+    volumes:
+      - mysql-data:/var/lib/mysql # 数据存储路径
+
+  # 添加 Redis 服务
+  redis:
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisKey-data:/data # 数据存储路径
+
 volumes:
   kafka-data:
+  mongo-data:
+  mysql-data:
+  redis-data:

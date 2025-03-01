@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package group;
+
+option go_package = "./";
+message Group{
+  int64 GroupId=1;
+  string GroupName=2;
+  string GroupUrl=3;
+  int64 RootUserId=4;
+  repeated int64 ManageUserId=5;
+  repeated int64 UserId=6;
+  int64 Status =7;
+  int64 CreateAt =8;
+  int64 UpdateAt=9;
+}
+
+message GroupCreateReq{
+  Group Group=1;
+}
+message GroupCreateResp{
+  Group Group=1;
+}
+
+message GroupUserIdReq { //用户拉/删人请求
+  int64   UserId =1;
+  int64 AddUserId=2;
+  int64 GroupId=3;
+  int64 Status=4;
+}
+message GroupUserIdResp  {}
+message GroupAdminIdReq{
+  int64  UserId=1;
+  int64 AdminId=2;
+  int64 GroupId=3;
+  int64  Status=4;
+}
+message GroupAdminIdResp  {}
+message GroupDeleteReq{
+  int64 UserId=1;
+  int64 GroupId=2;
+  int64 Status=3;
+}
+message GroupDeleteResp{}
+// 用户服务
+service GroupService {
+  rpc GroupCreate (GroupCreateReq) returns (GroupCreateResp);
+  rpc GroupUserId (GroupUserIdReq) returns (GroupUserIdResp);
+  rpc GroupAdminId (GroupAdminIdReq) returns (GroupAdminIdResp);
+  rpc GroupDelete (GroupDeleteReq) returns (GroupDeleteResp);
+}
+
