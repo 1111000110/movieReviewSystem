@@ -28,9 +28,14 @@ func (s *ReviewServiceServer) ReviewCreate(ctx context.Context, in *__.ReviewCre
 	return l.ReviewCreate(in)
 }
 
-func (s *ReviewServiceServer) ReviewDelete(ctx context.Context, in *__.ReviewDeleteReq) (*__.ReviewCreateResp, error) {
+func (s *ReviewServiceServer) ReviewDelete(ctx context.Context, in *__.ReviewDeleteReq) (*__.ReviewDeleteResp, error) {
 	l := logic.NewReviewDeleteLogic(ctx, s.svcCtx)
 	return l.ReviewDelete(in)
+}
+
+func (s *ReviewServiceServer) ReviewDeleteByHeadId(ctx context.Context, in *__.ReviewDeleteByHeadIdReq) (*__.ReviewDeleteResp, error) {
+	l := logic.NewReviewDeleteByHeadIdLogic(ctx, s.svcCtx)
+	return l.ReviewDeleteByHeadId(in)
 }
 
 func (s *ReviewServiceServer) ReviewGetByBaseId(ctx context.Context, in *__.ReviewGetByBaseIdReq) (*__.ReviewGetResp, error) {

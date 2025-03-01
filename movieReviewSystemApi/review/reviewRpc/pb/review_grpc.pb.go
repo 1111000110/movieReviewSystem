@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ReviewService_ReviewCreate_FullMethodName      = "/review.ReviewService/ReviewCreate"
-	ReviewService_ReviewDelete_FullMethodName      = "/review.ReviewService/ReviewDelete"
-	ReviewService_ReviewGetByBaseId_FullMethodName = "/review.ReviewService/ReviewGetByBaseId"
-	ReviewService_ReviewGetByRootId_FullMethodName = "/review.ReviewService/ReviewGetByRootId"
+	ReviewService_ReviewCreate_FullMethodName         = "/review.ReviewService/ReviewCreate"
+	ReviewService_ReviewDelete_FullMethodName         = "/review.ReviewService/ReviewDelete"
+	ReviewService_ReviewDeleteByHeadId_FullMethodName = "/review.ReviewService/ReviewDeleteByHeadId"
+	ReviewService_ReviewGetByBaseId_FullMethodName    = "/review.ReviewService/ReviewGetByBaseId"
+	ReviewService_ReviewGetByRootId_FullMethodName    = "/review.ReviewService/ReviewGetByRootId"
 )
 
 // ReviewServiceClient is the client API for ReviewService service.
@@ -30,7 +31,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReviewServiceClient interface {
 	ReviewCreate(ctx context.Context, in *ReviewCreateReq, opts ...grpc.CallOption) (*ReviewCreateResp, error)
-	ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewCreateResp, error)
+	ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error)
+	ReviewDeleteByHeadId(ctx context.Context, in *ReviewDeleteByHeadIdReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error)
 	ReviewGetByBaseId(ctx context.Context, in *ReviewGetByBaseIdReq, opts ...grpc.CallOption) (*ReviewGetResp, error)
 	ReviewGetByRootId(ctx context.Context, in *ReviewGetByRootIdReq, opts ...grpc.CallOption) (*ReviewGetResp, error)
 }
@@ -53,10 +55,20 @@ func (c *reviewServiceClient) ReviewCreate(ctx context.Context, in *ReviewCreate
 	return out, nil
 }
 
-func (c *reviewServiceClient) ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewCreateResp, error) {
+func (c *reviewServiceClient) ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ReviewCreateResp)
+	out := new(ReviewDeleteResp)
 	err := c.cc.Invoke(ctx, ReviewService_ReviewDelete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reviewServiceClient) ReviewDeleteByHeadId(ctx context.Context, in *ReviewDeleteByHeadIdReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReviewDeleteResp)
+	err := c.cc.Invoke(ctx, ReviewService_ReviewDeleteByHeadId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +100,8 @@ func (c *reviewServiceClient) ReviewGetByRootId(ctx context.Context, in *ReviewG
 // for forward compatibility.
 type ReviewServiceServer interface {
 	ReviewCreate(context.Context, *ReviewCreateReq) (*ReviewCreateResp, error)
-	ReviewDelete(context.Context, *ReviewDeleteReq) (*ReviewCreateResp, error)
+	ReviewDelete(context.Context, *ReviewDeleteReq) (*ReviewDeleteResp, error)
+	ReviewDeleteByHeadId(context.Context, *ReviewDeleteByHeadIdReq) (*ReviewDeleteResp, error)
 	ReviewGetByBaseId(context.Context, *ReviewGetByBaseIdReq) (*ReviewGetResp, error)
 	ReviewGetByRootId(context.Context, *ReviewGetByRootIdReq) (*ReviewGetResp, error)
 	mustEmbedUnimplementedReviewServiceServer()
@@ -104,8 +117,11 @@ type UnimplementedReviewServiceServer struct{}
 func (UnimplementedReviewServiceServer) ReviewCreate(context.Context, *ReviewCreateReq) (*ReviewCreateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReviewCreate not implemented")
 }
-func (UnimplementedReviewServiceServer) ReviewDelete(context.Context, *ReviewDeleteReq) (*ReviewCreateResp, error) {
+func (UnimplementedReviewServiceServer) ReviewDelete(context.Context, *ReviewDeleteReq) (*ReviewDeleteResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReviewDelete not implemented")
+}
+func (UnimplementedReviewServiceServer) ReviewDeleteByHeadId(context.Context, *ReviewDeleteByHeadIdReq) (*ReviewDeleteResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReviewDeleteByHeadId not implemented")
 }
 func (UnimplementedReviewServiceServer) ReviewGetByBaseId(context.Context, *ReviewGetByBaseIdReq) (*ReviewGetResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReviewGetByBaseId not implemented")
@@ -170,6 +186,24 @@ func _ReviewService_ReviewDelete_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReviewService_ReviewDeleteByHeadId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReviewDeleteByHeadIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).ReviewDeleteByHeadId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReviewService_ReviewDeleteByHeadId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).ReviewDeleteByHeadId(ctx, req.(*ReviewDeleteByHeadIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ReviewService_ReviewGetByBaseId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReviewGetByBaseIdReq)
 	if err := dec(in); err != nil {
@@ -220,6 +254,10 @@ var ReviewService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReviewDelete",
 			Handler:    _ReviewService_ReviewDelete_Handler,
+		},
+		{
+			MethodName: "ReviewDeleteByHeadId",
+			Handler:    _ReviewService_ReviewDeleteByHeadId_Handler,
 		},
 		{
 			MethodName: "ReviewGetByBaseId",

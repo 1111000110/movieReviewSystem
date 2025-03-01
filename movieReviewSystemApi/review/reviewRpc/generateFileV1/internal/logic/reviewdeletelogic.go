@@ -24,7 +24,7 @@ func NewReviewDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Revi
 	}
 }
 
-func (l *ReviewDeleteLogic) ReviewDelete(in *__.ReviewDeleteReq) (*__.ReviewCreateResp, error) {
+func (l *ReviewDeleteLogic) ReviewDelete(in *__.ReviewDeleteReq) (*__.ReviewDeleteResp, error) {
 	// todo: add your logic here and delete this line
 	deleteIds := make(map[int][]int64)
 	rootDeleteIds := make(map[int][]int64)
@@ -61,7 +61,7 @@ func (l *ReviewDeleteLogic) ReviewDelete(in *__.ReviewDeleteReq) (*__.ReviewCrea
 			return nil, err
 		}
 	}
-	return &__.ReviewCreateResp{
+	return &__.ReviewDeleteResp{
 		Count: Count,
 	}, nil
 }

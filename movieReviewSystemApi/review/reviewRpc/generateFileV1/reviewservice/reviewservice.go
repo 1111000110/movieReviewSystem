@@ -14,18 +14,20 @@ import (
 )
 
 type (
-	Review               = __.Review
-	ReviewCreateReq      = __.ReviewCreateReq
-	ReviewCreateResp     = __.ReviewCreateResp
-	ReviewDeleteReq      = __.ReviewDeleteReq
-	ReviewDeleteResp     = __.ReviewDeleteResp
-	ReviewGetByBaseIdReq = __.ReviewGetByBaseIdReq
-	ReviewGetByRootIdReq = __.ReviewGetByRootIdReq
-	ReviewGetResp        = __.ReviewGetResp
+	Review                  = __.Review
+	ReviewCreateReq         = __.ReviewCreateReq
+	ReviewCreateResp        = __.ReviewCreateResp
+	ReviewDeleteByHeadIdReq = __.ReviewDeleteByHeadIdReq
+	ReviewDeleteReq         = __.ReviewDeleteReq
+	ReviewDeleteResp        = __.ReviewDeleteResp
+	ReviewGetByBaseIdReq    = __.ReviewGetByBaseIdReq
+	ReviewGetByRootIdReq    = __.ReviewGetByRootIdReq
+	ReviewGetResp           = __.ReviewGetResp
 
 	ReviewService interface {
 		ReviewCreate(ctx context.Context, in *ReviewCreateReq, opts ...grpc.CallOption) (*ReviewCreateResp, error)
-		ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewCreateResp, error)
+		ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error)
+		ReviewDeleteByHeadId(ctx context.Context, in *ReviewDeleteByHeadIdReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error)
 		ReviewGetByBaseId(ctx context.Context, in *ReviewGetByBaseIdReq, opts ...grpc.CallOption) (*ReviewGetResp, error)
 		ReviewGetByRootId(ctx context.Context, in *ReviewGetByRootIdReq, opts ...grpc.CallOption) (*ReviewGetResp, error)
 	}
@@ -46,9 +48,14 @@ func (m *defaultReviewService) ReviewCreate(ctx context.Context, in *ReviewCreat
 	return client.ReviewCreate(ctx, in, opts...)
 }
 
-func (m *defaultReviewService) ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewCreateResp, error) {
+func (m *defaultReviewService) ReviewDelete(ctx context.Context, in *ReviewDeleteReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error) {
 	client := __.NewReviewServiceClient(m.cli.Conn())
 	return client.ReviewDelete(ctx, in, opts...)
+}
+
+func (m *defaultReviewService) ReviewDeleteByHeadId(ctx context.Context, in *ReviewDeleteByHeadIdReq, opts ...grpc.CallOption) (*ReviewDeleteResp, error) {
+	client := __.NewReviewServiceClient(m.cli.Conn())
+	return client.ReviewDeleteByHeadId(ctx, in, opts...)
 }
 
 func (m *defaultReviewService) ReviewGetByBaseId(ctx context.Context, in *ReviewGetByBaseIdReq, opts ...grpc.CallOption) (*ReviewGetResp, error) {

@@ -40,12 +40,16 @@ message ReviewCreateResp{
 message ReviewDeleteReq{
   repeated Review Review=1;
 }
+message ReviewDeleteByHeadIdReq{
+  repeated int64 HeadId=1;
+}
 message ReviewDeleteResp{
   int64 Count=1;
 }
 service ReviewService {
   rpc ReviewCreate (ReviewCreateReq) returns (ReviewCreateResp);
-  rpc ReviewDelete (ReviewDeleteReq) returns (ReviewCreateResp);
+  rpc ReviewDelete (ReviewDeleteReq) returns (ReviewDeleteResp);
+  rpc ReviewDeleteByHeadId (ReviewDeleteByHeadIdReq) returns (ReviewDeleteResp);
   rpc ReviewGetByBaseId (ReviewGetByBaseIdReq) returns (ReviewGetResp);
   rpc ReviewGetByRootId (ReviewGetByRootIdReq) returns(ReviewGetResp);
 }

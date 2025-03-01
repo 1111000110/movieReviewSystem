@@ -21,6 +21,7 @@ type (
 		DeleteByIds(ctx context.Context, reviewIds []int64) (int64, error)
 		DeleteByBaseIds(ctx context.Context, baseIds []int64) (int64, error)
 		DeleteByRootIds(ctx context.Context, rootIds []int64) (int64, error)
+		DeleteByHeadIds(ctx context.Context, headIds []int64) (int64, error)
 	}
 
 	customReviewModel struct {
@@ -28,6 +29,10 @@ type (
 	}
 )
 
+func (cm customReviewModel) DeleteByHeadIds(ctx context.Context, HeadIds []int64) (int64, error) {
+	count, err := cm.conn.DeleteMany(ctx, bson.M{"headId": bson.M{"$in": HeadIds}}, nil)
+	return count, err
+}
 func (cm customReviewModel) DeleteByRootIds(ctx context.Context, rootIds []int64) (int64, error) {
 	count, err := cm.conn.DeleteMany(ctx, bson.M{"rootId": bson.M{"$in": rootIds}}, nil)
 	return count, err
