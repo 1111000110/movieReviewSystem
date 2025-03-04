@@ -1,0 +1,49 @@
+syntax ="proto3";
+package thumbUp;
+
+option go_package = "./";
+message ThumbUp{
+   int64 ThumbUpId=1;
+   int64 BaseId=2;
+   int64 UserId=3;
+   int64 CreateAt=4;
+   int64 UpdateAt=5;
+   int64 Val=6;
+}
+//获取点赞信息
+message ThumbUpGetRespStruct{
+   optional ThumbUp ThumbUp=1;//点赞信息表
+   int64 count=2;//总数
+}
+message ThumbUpGetByBaseIdReq{
+   optional int64 BaseId=1;
+   int64 type=2;
+}
+message ThumbUpGetByUserIdReq{
+   optional int64 UserId=1;
+   int64 type=2;
+}
+message ThumbUpGetByThumbUpIdReq{
+   optional int64 ThumbUpId=1;
+   int64 type=2;
+}
+message ThumbUpGetResp{
+   optional ThumbUpGetRespStruct ThumbUps=1;
+   int64 count=2;
+}
+//创建修改点赞点踩信息
+message ThumbUpCreateReq{
+   int64 BaseId=1;
+   int64 UserId=2;
+   int64 Type=3;
+   int64 val=4;
+}
+message ThumbUpCreateResp{
+
+}
+service ThumbUpService{
+   rpc ThumbUpGetByBaseId (ThumbUpGetByBaseIdReq) returns (ThumbUpGetResp);
+   rpc ThumbUpGetByUserId (ThumbUpGetByUserIdReq) returns (ThumbUpGetResp);
+   rpc ThumbUpGetByThumbUpId (ThumbUpGetByThumbUpIdReq) returns (ThumbUpGetResp);
+   rpc ThumpUpCreate (ThumbUpCreateReq) returns (ThumbUpCreateResp);
+}

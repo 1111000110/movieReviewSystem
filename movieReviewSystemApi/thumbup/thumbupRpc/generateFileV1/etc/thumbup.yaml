@@ -1,0 +1,13 @@
+Name: thumbup.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: thumbup.rpc
+DB:
+  ThumbUp:
+  - mysql://root:root123@localhost:3306/reviewThumbUp
+  - mysql://root:root123@localhost:3306/postThumbUp
+  - mysql://root:root123@localhost:3306/themeThumbUp
+RedisConf:
+  Host: localhost:6379

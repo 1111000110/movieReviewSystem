@@ -1,64 +1,68 @@
-version: '3'
-services:
+version: '3'  # 指定 Docker Compose 文件的版本
+
+services:  # 定义服务列表
+  # Zookeeper 服务
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.2
+    image: confluentinc/cp-zookeeper:7.5.2  # 使用 Confluent 提供的 Zookeeper 镜像
     ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      - "2181:2181"  # 映射端口，将主机的 2181 端口映射到容器的 2181 端口
+    environment:  # 设置环境变量
+      ZOOKEEPER_CLIENT_PORT: 2181  # Zookeeper 监听的端口
+      ZOOKEEPER_TICK_TIME: 2000  # Zookeeper 的心跳时间
 
+  # Kafka 服务
   kafka:
-    image: confluentinc/cp-kafka:7.5.2
-    depends_on:
-      - zookeeper
+    image: confluentinc/cp-kafka:7.5.2  # 使用 Confluent 提供的 Kafka 镜像
+    depends_on:  # 指定依赖的服务
+      - zookeeper  # Kafka 依赖于 Zookeeper
     ports:
-      - "9092:9092"
-      - "29092:29092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    volumes:
-      - kafka-data:/var/lib/kafka/data
+      - "9092:9092"  # 映射 Kafka 的默认端口
+      - "29092:29092"  # 映射另一个 Kafka 端口
+    environment:  # 设置环境变量
+      KAFKA_BROKER_ID: 1  # Kafka Broker 的 ID
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  # Zookeeper 的连接地址
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092  # 广告监听器
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT  # 监听器安全协议映射
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT  # Broker 之间通信的监听器名称
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # 偏移量主题的复制因子
+    volumes:  # 挂载卷
+      - kafka-data:/var/lib/kafka/data  # 持久化 Kafka 数据
 
-  # 添加 MongoDB 服务
+  # MongoDB 服务
   mongodb:
-    image: mongo:latest
+    image: mongo:latest  # 使用最新的 MongoDB 镜像
     ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin # 设置管理员用户名
-      MONGO_INITDB_ROOT_PASSWORD: admin123 # 设置管理员密码
-    volumes:
-      - mongo-data:/data/db # 数据存储路径
+      - "27017:27017"  # 映射 MongoDB 的默认端口
+    environment:  # 设置环境变量
+      MONGO_INITDB_ROOT_USERNAME: admin  # 设置 MongoDB 的管理员用户名
+      MONGO_INITDB_ROOT_PASSWORD: admin123  # 设置 MongoDB 的管理员密码
+    volumes:  # 挂载卷
+      - mongo-data:/data/db  # 持久化 MongoDB 数据
 
-  # 添加 MySQL 服务
+  # MySQL 服务
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0  # 使用 MySQL 8.0 镜像
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root123 # 设置 root 用户密码
-      MYSQL_DATABASE: testdb # 设置初始数据库
-      MYSQL_USER: testuser # 设置普通用户
-      MYSQL_PASSWORD: testuser123 # 设置普通用户密码
-    volumes:
-      - mysql-data:/var/lib/mysql # 数据存储路径
+      - "3306:3306"  # 映射 MySQL 的默认端口
+    environment:  # 设置环境变量
+      MYSQL_ROOT_PASSWORD: root123  # 设置 MySQL 的 root 用户密码
+      MYSQL_DATABASE: testdb  # 设置初始数据库
+      MYSQL_USER: testuser  # 设置普通用户
+      MYSQL_PASSWORD: testuser123  # 设置普通用户密码
+    volumes:  # 挂载卷
+      - mysql-data:/var/lib/mysql  # 持久化 MySQL 数据
 
-  # 添加 Redis 服务
+  # Redis 服务
   redis:
-    image: redis:7.0
+    image: redis:7.0  # 使用 Redis 7.0 镜像
     ports:
-      - "6379:6379"
-    volumes:
-      - redisKey-data:/data # 数据存储路径
+      - "6379:6379"  # 映射 Redis 的默认端口
+    volumes:  # 挂载卷
+      - redis-data:/data  # 持久化 Redis 数据
 
-volumes:
-  kafka-data:
-  mongo-data:
-  mysql-data:
-  redis-data:
+
+volumes:  # 定义卷
+  kafka-data:  # Kafka 数据卷
+  mongo-data:  # MongoDB 数据卷
+  mysql-data:  # MySQL 数据卷
+  redis-data:  # Redis 数据卷

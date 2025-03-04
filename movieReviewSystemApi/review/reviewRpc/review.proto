@@ -15,6 +15,8 @@ message Review{
   int64 RootCommentCount=9;
   int64 CreateAt=10;
   int64 UpdateAt=11;
+  int64 Like=12;
+  int64 DisLike=13;
 }
 message ReviewGetByBaseIdReq{
   int64 BaseId=1;
