@@ -12,23 +12,23 @@ message ThumbUp{
 }
 //获取点赞信息
 message ThumbUpGetRespStruct{
-   optional ThumbUp ThumbUp=1;//点赞信息表
+   repeated ThumbUp ThumbUp=1;//点赞信息表
    int64 count=2;//总数
 }
 message ThumbUpGetByBaseIdReq{
-   optional int64 BaseId=1;
+   repeated int64 BaseId=1;
    int64 type=2;
 }
 message ThumbUpGetByUserIdReq{
-   optional int64 UserId=1;
+   repeated int64 UserId=1;
    int64 type=2;
 }
 message ThumbUpGetByThumbUpIdReq{
-   optional int64 ThumbUpId=1;
+   repeated int64 ThumbUpId=1;
    int64 type=2;
 }
 message ThumbUpGetResp{
-   optional ThumbUpGetRespStruct ThumbUps=1;
+   repeated ThumbUpGetRespStruct ThumbUps=1;
    int64 count=2;
 }
 //创建修改点赞点踩信息

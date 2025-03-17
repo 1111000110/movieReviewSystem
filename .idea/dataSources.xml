@@ -8,13 +8,6 @@
       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="user@localhost" uuid="8ad04050-950f-48ff-8803-cd9716a828be">
-      <driver-ref>mongo</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.dbschema.MongoJdbcDriver</jdbc-driver>
-      <jdbc-url>mongodb://localhost:27017/user</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="0@localhost" uuid="36a8244e-2168-48d7-a8d6-9ffc3ae0e9d4">
       <driver-ref>redis</driver-ref>
       <synchronize>true</synchronize>
@@ -22,7 +15,7 @@
       <jdbc-url>jdbc:redis://localhost:6379/0</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@localhost [2]" uuid="3159a4ec-56f6-4fed-8df2-f459de591aa6">
+    <data-source source="LOCAL" name="@user" uuid="681f890d-2d6a-4b31-97a2-04683a33c1e3">
       <driver-ref>mongo</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.dbschema.MongoJdbcDriver</jdbc-driver>
