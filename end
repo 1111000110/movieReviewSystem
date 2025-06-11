@@ -13,23 +13,23 @@ echo "Stopping etcd..."
 pkill etcd
 echo "etcd stopped."
 
-# 停止 userRpc 和 userApi
+# 停止 user-rpc 和 user-api
 echo "Stopping userRpc..."
-pkill userRpc
+pkill user-rpc
 echo "userRpc stopped."
 
 echo "Stopping userApi..."
-pkill userApi
+pkill user-api
 echo "userApi stopped."
 
 # 清理日志文件（可选）
 echo "Cleaning log files..."
 rm -f etcd.log
 echo "Log files cleaned."
-cd movieReviewSystemApi/user/userRpc/generateFileV1 || exit
-rm -rf userRpc userRpc.log
+cd movieReviewSystemApi/user/user-rpc/generateFileV1 || exit
+rm -rf user-rpc user-rpc.log
 cd ../../../../
-cd movieReviewSystemApi/user/userApi/generateFileV1 || exit
-rm -rf userApi userApi.log
+cd movieReviewSystemApi/user/user-api/generateFileV1 || exit
+rm -rf user-api user-api.log
 cd ../../../../
 echo "All services stopped and resources cleaned."

@@ -30,14 +30,14 @@ if ! nc -z 127.0.0.1 2379; then
     exit 1
 fi
 
-# 编译并运行 userRpc
-cd movieReviewSystemApi/user/userRpc/generateFileV1 || exit
+# 编译并运行 user-rpc
+cd movieReviewSystemApi/user/user-rpc/generateFileV1 || exit
 go build -o userRpc user.go
 ./userRpc > userRpc.log 2>&1 &
 cd ../../../../
 
-# 编译并运行 userApi
-cd movieReviewSystemApi/user/userApi/generateFileV1 || exit
+# 编译并运行 user-api
+cd movieReviewSystemApi/user/user-api/generate-file || exit
 go build -o userApi user.go
 ./userApi > userApi.log 2>&1 &
 cd ../../../../

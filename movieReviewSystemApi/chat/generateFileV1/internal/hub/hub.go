@@ -16,15 +16,20 @@ type Hub struct {
 // NewHub 创建一个新的 Hub 实例。
 func NewHub() Hub {
 	return Hub{
-		Register:   make(chan Client),               // 初始化注册请求通道
-		Unregister: make(chan Client),               // 初始化注销请求通道
-		Clients:    make(map[int64]Client),          // 初始化客户端集合
-		Broadcast:  make(chan types.Message, 10000), // 带缓冲，消息堆积成啥了，草
+		Register:   make(chan Client),      // 初始化注册请求通道
+		Unregister: make(chan Client),      // 初始化注销请求通道
+		Clients:    make(map[int64]Client), // 初始化客户端集合
+		Broadcast:  make(chan types.Message, 10000),
 	}
 }
 
 // Run 启动 Hub 的主循环，处理注册、注销和消息发送。
 func (h *Hub) Run() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("panic for Hub:", err)
+		}
+	}()
 	for {
 		select {
 		case client := <-h.Register: // 处理客户端注册请求

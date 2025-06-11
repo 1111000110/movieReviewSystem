@@ -8,4 +8,9 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+	DB struct {
+		Url        string
+		Db         string
+		Collection string
+	}
 }

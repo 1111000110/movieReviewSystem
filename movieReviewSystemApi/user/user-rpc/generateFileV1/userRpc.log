@@ -1,0 +1,16 @@
+2025/05/27 15:14:45 server selection error: context deadline exceeded, current topology: { Type: Unknown, Servers: [{ Addr: localhost:27017, Type: Unknown, Last error: dial tcp 127.0.0.1:27017: connect: connection refused }, ] }
+
+goroutine 1 [running]:
+runtime/debug.Stack()
+	/Users/zhangxuan/sdk/go1.21.6/src/runtime/debug/stack.go:24 +0x64
+github.com/zeromicro/go-zero/core/logx.Must({0x1027d4020?, 0x1400037b320?})
+	/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/logx/logs.go:245 +0x40
+github.com/zeromicro/go-zero/core/stores/mon.MustNewModel({0x14000344800?, 0x101eaaf30?}, {0x14000115af4?, 0xd?}, {0x14000115aec?, 0x140004b6400?}, {0x0?, 0x0?, 0x140004b6400?})
+	/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/stores/mon/model.go:42 +0x3c
+movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user.NewUserModel(...)
+	/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user/usermodel.go:39
+movieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/internal/svc.NewServiceContext({{{{0x14000115b78, 0x8}, {{...}, {...}, {...}, {...}, {...}, {...}, 0x0, 0x0, ...}, ...}, ...}, ...})
+	/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/internal/svc/servicecontext.go:18 +0x44
+main.main()
+	/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/user.go:25 +0xd0
+{"@timestamp":"2025-05-27T15:14:45.774+08:00","content":"server selection error: context deadline exceeded, current topology: { Type: Unknown, Servers: [{ Addr: localhost:27017, Type: Unknown, Last error: dial tcp 127.0.0.1:27017: connect: connection refused }, ] }\n\ngoroutine 1 [running]:\nruntime/debug.Stack()\n\t/Users/zhangxuan/sdk/go1.21.6/src/runtime/debug/stack.go:24 +0x64\ngithub.com/zeromicro/go-zero/core/logx.Must({0x1027d4020?, 0x1400037b320?})\n\t/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/logx/logs.go:245 +0x40\ngithub.com/zeromicro/go-zero/core/stores/mon.MustNewModel({0x14000344800?, 0x101eaaf30?}, {0x14000115af4?, 0xd?}, {0x14000115aec?, 0x140004b6400?}, {0x0?, 0x0?, 0x140004b6400?})\n\t/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/stores/mon/model.go:42 +0x3c\nmovieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user.NewUserModel(...)\n\t/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/userModel/mongo/user/usermodel.go:39\nmovieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/internal/svc.NewServiceContext({{{{0x14000115b78, 0x8}, {{...}, {...}, {...}, {...}, {...}, {...}, 0x0, 0x0, ...}, ...}, ...}, ...})\n\t/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/internal/svc/servicecontext.go:18 +0x44\nmain.main()\n\t/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-rpc/generateFileV1/user.go:25 +0xd0\n","level":"fatal"}

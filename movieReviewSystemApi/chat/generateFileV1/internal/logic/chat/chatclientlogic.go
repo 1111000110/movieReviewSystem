@@ -108,10 +108,16 @@ func (c *ChatClientLogic) WritePump() {
 }
 func NewChatClientLogic(ctx context.Context, svcCtx *svc.ServiceContext, conn *websocket.Conn, userId int64) *ChatClientLogic {
 	conn.SetReadLimit(svcCtx.Config.WebSocket.MaxMessageSize)
-	conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
+	err := conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
+	if err != nil {
+		log.Fatalf("SetReadDeadline failed: %s", err.Error())
+	}
 	conn.SetPongHandler(func(string) error {
 		// 当收到 Pong 消息时，重置读取超时时间
-		conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
+		err = conn.SetReadDeadline(time.Now().Add(time.Duration(svcCtx.Config.WebSocket.PongWait) * time.Second))
+		if err != nil {
+			log.Fatalf("SetReadDeadline failed: %s", err.Error())
+		}
 		return nil
 	})
 	return &ChatClientLogic{

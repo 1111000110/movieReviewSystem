@@ -8,11 +8,29 @@ info (
 	version: "1.0"
 )
 
+type ( // 帖子结构体
+	Post {
+		UserId     int64    `json:"userId"`
+		ThemeId    int64    `json:"themeId"`
+		Title      string   `json:"title"`
+		Text       string   `json:"text"`
+		Image      []string `json:"image"`
+		Video      []string `json:"video"`
+		CreateTime int64    `json:"createTime"`
+		UpdateTime int64    `json:"updateTime"`
+		Source     int64    `json:"source"`
+	}
+)
+
 type ( //发布
 	PostCreateReq {
-		Text  string   `json:"text"`
-		Image []string `json:"image"`
-		Video []string `json:"video"`
+		UserId  int64    `json:"userId"`
+		ThemeId int64    `json:"themeId"`
+		Title   string   `json:"title"`
+		Text    string   `json:"text"`
+		Image   []string `json:"image"`
+		Video   []string `json:"video"`
+		Source  int64    `json:"source"`
 	}
 	PostCreateResp {
 		PostId int64 `json:"postId"`
@@ -33,6 +51,18 @@ type ( //查询
 )
 
 type (
+	PostGetListRep {
+		UserId int64 `form:"userId"`
+		Sort   int64 `form:"sort"`
+		Offset int64 `form:"offset"`
+		Limit  int64 `form:"limit"`
+	}
+	PostGetListResp {
+		PostInfos []Post `json:"postInfos"`
+	}
+)
+
+type (
 	PostDeleteByPostIdReq {
 		PostId int64 `json:"postId"`
 	}
@@ -49,12 +79,15 @@ type (
 )
 service Post {
 	@handler PostCreate
-	put /user/delete (PostCreateReq) returns (PostCreateResp)
+	put /post/delete (PostCreateReq) returns (PostCreateResp)
 
 	@handler PostDeleteByPostId
-	put /user/update (PostDeleteByPostIdReq) returns (PostDeleteResp)
+	put /post/update (PostDeleteByPostIdReq) returns (PostDeleteResp)
 
 	@handler PostFindByPostId
-	get /user/query (PostFindByPostIdReq) returns (PostFindResp)
+	get /post/query (PostFindByPostIdReq) returns (PostFindResp)
+
+	@handler PostGetList
+	get /post/list (PostGetListRep) returns (PostGetListResp)
 }
 

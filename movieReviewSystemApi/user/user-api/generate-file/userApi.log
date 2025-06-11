@@ -1,0 +1,12 @@
+2025/05/27 15:14:45 empty config value
+
+goroutine 1 [running]:
+runtime/debug.Stack()
+	/Users/zhangxuan/sdk/go1.21.6/src/runtime/debug/stack.go:24 +0x64
+github.com/zeromicro/go-zero/core/logx.Must({0x106324900?, 0x107276ed0?})
+	/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/logx/logs.go:245 +0x40
+github.com/zeromicro/go-zero/core/configcenter.MustNewConfigCenter[...]({{0x105ad3366?, 0x1?}, 0x62?}, {0x10632c6d0?, 0x140004fc0f0?})
+	/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/configcenter/configurator.go:61 +0x40
+main.main()
+	/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-api/generate-file/user.go:32 +0x15c
+{"@timestamp":"2025-05-27T15:14:45.021+08:00","content":"empty config value\n\ngoroutine 1 [running]:\nruntime/debug.Stack()\n\t/Users/zhangxuan/sdk/go1.21.6/src/runtime/debug/stack.go:24 +0x64\ngithub.com/zeromicro/go-zero/core/logx.Must({0x106324900?, 0x107276ed0?})\n\t/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/logx/logs.go:245 +0x40\ngithub.com/zeromicro/go-zero/core/configcenter.MustNewConfigCenter[...]({{0x105ad3366?, 0x1?}, 0x62?}, {0x10632c6d0?, 0x140004fc0f0?})\n\t/Users/zhangxuan/go/pkg/mod/github.com/zeromicro/go-zero@v1.7.6/core/configcenter/configurator.go:61 +0x40\nmain.main()\n\t/Users/zhangxuan/GolandProjects/awesomeProject/movieReviewSystem/movieReviewSystemApi/user/user-api/generate-file/user.go:32 +0x15c\n","level":"fatal"}

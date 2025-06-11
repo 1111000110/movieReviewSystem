@@ -751,3 +751,19 @@ updateDate int64//更新时间
 ## 缓存表
 1. Redis string，key为movie:{id}，值为对应数据。
 ## 审核服务
+
+# 帖子信息
+```mongo
+postId         int64     // 帖子ID，唯一标识一条帖子
+userId         int64     // 发布帖子的用户ID
+movieId        int64     // 所属的电影ID（关联 movieInformationId）
+title          string    // 帖子标题，用于总结帖子的主要内容
+content        string    // 帖子正文，包含用户的评价、讨论或感想
+images         []string  // 帖子配图，存储图片URL数组（可选）
+tags           []string  // 帖子标签，用于分类，如“剧透”“影评”“推荐”
+likeCount      int       // 点赞数
+commentCount   int       // 评论数（方便快速展示）
+createDate     int64     // 创建时间（Unix 时间戳）
+updateDate     int64     // 更新时间（Unix 时间戳）
+
+```

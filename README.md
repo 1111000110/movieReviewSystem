@@ -1,6 +1,7 @@
 # 基于go-zero的影评系统微信小程序
 ## 架构设计
 [系统接口设计](explain.md)
+[论文](movieReviewSystemApi/基于go-zero的影评系统微信小程序.md)
 1. 评论服务：Redis Sorted Set管理评论热度，空值解决缓存穿透，MongoDB分表存储动态评论内容。
 2. 点赞服务
 3. 聊天服务：基于Websocket实现私聊和群聊功能，通过其心跳机制结合 Redis 维护用户在线状态，通过确认机制实现已读未

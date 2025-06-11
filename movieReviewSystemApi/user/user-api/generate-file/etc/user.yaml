@@ -1,0 +1,14 @@
+Name: user
+Host: 0.0.0.0
+Port: 8000
+UserRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+Auth:
+  AccessSecret: "xiangongyedaxuzhangxuanshiye"
+  AccessExpire: 6000
+Log:
+  Level: info
+Test: zhangxuan
